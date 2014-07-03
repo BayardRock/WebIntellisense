@@ -1,0 +1,12 @@
+.navbar {
+    margin-bottom: 0;
+}
+
+.tab-content {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.main {
+    margin: 15px;
+}

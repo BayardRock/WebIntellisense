@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Web Intellisense - Folder Example</title>
+    <script src="js/references/jquery-2.1.1.min.js"></script>
+    <script src="js/references/bootstrap/bootstrap.min.js"></script>
+    <script src="js/references/codemirror-4.3/codemirror.js"></script>
+    <script src="js/references/codemirror-4.3/mllike.js"></script>
+    <script src="js/lib/intellisense.js"></script>
+    <script src="js/lib/intellisense-codemirror.js"></script>
+    <script src="js/references/ace-1.1.4/ace.js"></script>
+    <script src="js/references/ace-1.1.4/mode-html.js"></script>
+    <script src="js/references/ace-1.1.4/mode-css.js"></script>
+    <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
+    <link href="css/intellisense.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="js/references/codemirror-4.3/codemirror.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .tab-content {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .icon-glyph-3 {
+            background-image: url('css/method.png');
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        $(function ()
+        {
+            // codemirror
+            var editor4 = CodeMirror(document.getElementById('editor4'),
+            {
+                value: "let x = 1",
+                mode: 'text/x-fsharp',
+                lineNumbers: true
+            });
+
+            var intellisense4 = new CodeMirrorIntellisense(editor4);
+            intellisense4.addDeclarationTrigger({ keyCode: 190 });
+            intellisense4.addMethodsTrigger({ keyCode: 57, shiftKey: true });
+            intellisense4.addMethodsTrigger({ keyCode: 48, shiftKey: true });
+            intellisense4.addMethodsTrigger({ keyCode: 8 });
+            intellisense4.onMethod(function (item)
+            {
+                if (item.keyCode === 48 || item.keyCode === 8)
+                {
+                    intellisense4.getMeths().setVisible(false);
+                }
+                else
+                {
+                    intellisense4.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
+                }
+            });
+            intellisense4.onDeclaration(function (item)
+            {
+                var data = [
+                    { glyph: 3, name: 'CompareTo', documentation: 'Converts to object to another object' },
+                    { glyph: 3, name: 'ToString', documentation: 'Converts to object to a string' }
+                ];
+                intellisense4.setDeclarations(data);
+            });
+
+            ace.edit('htmlEditor').getSession().setMode("ace/mode/html");
+            ace.edit('cssEditor').getSession().setMode("ace/mode/css");
+            ace.edit('javascriptEditor').getSession().setMode("ace/mode/javascript");
+        });
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Web Intellisense</a>
+            </div>
+            <div class="navbar-collapse collapse navbar-inverse-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="api.html">API</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="demo1.html">TextBox Directory Structure</a></li>
+                            <li><a href="demo2.html">TextBox Twitter</a></li>
+                            <li><a href="demo3.html">TextArea Code</a></li>
+                            <li><a href="demo4.html">CodeMirror Code</a></li>
+                            <li><a href="demo5.html">ACE HTML</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul class="breadcrumb" style="margin-bottom: 5px;">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="demos.html">Demos</a></li>
+            <li class="active">CodeMirror Code</li>
+        </ul>
+    </header>
+
+    <div class="main">
+
+        <h1>CodeMirror Code</h1>
+        <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+            <li class="active"><a href="#demo" data-toggle="tab">Live Demo</a></li>
+            <li><a href="#js" data-toggle="tab">JavaScript</a></li>
+            <li><a href="#html" data-toggle="tab">HTML</a></li>
+            <li><a href="#css" data-toggle="tab">CSS</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="demo">
+                <p>
+                    This demo uses CodeMirror intellisense. Declaration trigger on the key `.`. Different documentation is shown for each declaration.
+                    <em>The data shown is hard coded.</em>
+                </p>
+                <div>Type <strong>`.` or `(`</strong></div>
+                <div id="editor4"></div>
+            </div>
+
+            <div class="tab-pane fade" id="js">
+
+                <div id="javascriptEditor" style="width: 100%; height: 400px;">
+// codemirror
+var editor4 = CodeMirror(document.getElementById('editor4'),
+{
+    value: "let x = 1",
+    mode: 'text/x-fsharp',
+    lineNumbers: true
+});
+
+var intellisense4 = new CodeMirrorIntellisense(editor4);
+intellisense4.addDeclarationTrigger({ keyCode: 190 });
+intellisense4.addMethodsTrigger({ keyCode: 57, shiftKey: true });
+intellisense4.addMethodsTrigger({ keyCode: 48, shiftKey: true });
+intellisense4.addMethodsTrigger({ keyCode: 8 });
+intellisense4.onMethod(function (item)
+{
+    if (item.keyCode === 48 || item.keyCode === 8)
+    {
+        intellisense4.getMeths().setVisible(false);
+    }
+    else
+    {
+        intellisense4.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
+    }
+});
+intellisense4.onDeclaration(function (item)
+{
+    var data = [
+        { glyph: 3, name: 'CompareTo', documentation: 'Converts to object to another object' },
+        { glyph: 3, name: 'ToString', documentation: 'Converts to object to a string' }
+    ];
+    intellisense4.setDeclarations(data);
+});
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="html">
+                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;div id="editor4"&gt;&lt;/div&gt;</div>
+            </div>
+            <div class="tab-pane fade" id="css">
+                <div id="cssEditor" style="width: 100%; height: 400px;">
+                    .icon-glyph-3 {
+                    background-image: url('css/method.png');
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
