@@ -22,7 +22,7 @@
     </style>
     <script type="text/javascript">
 
-        $(function ()
+        function demo()
         {
             // directory
             var directoryStructure =
@@ -50,10 +50,44 @@
                     intellisense1.setDeclarations(data);
                 }
             });
+        }
 
-            ace.edit('htmlEditor').getSession().setMode("ace/mode/html");
-            ace.edit('cssEditor').getSession().setMode("ace/mode/css");
-            ace.edit('javascriptEditor').getSession().setMode("ace/mode/javascript");
+        function formatScript(script)
+        {
+            var whiteSpaceCount = 0;
+            var lines = script.split('\n');
+            lines = lines.splice(2, lines.length - 3);
+            for (var i in lines[0])
+            {
+                var c = lines[0][i];
+                if (c !== ' ')
+                {
+                    break;
+                }
+                whiteSpaceCount++;
+            }
+            lines = lines.map(function (item)
+            {
+                return item.substring(whiteSpaceCount);
+            });
+            return lines.join('\n');
+        }
+
+        $(function ()
+        {
+            var htmlEditor = ace.edit('htmlEditor');
+            htmlEditor.getSession().setMode("ace/mode/html");
+            htmlEditor.setValue($('#demoHtml').get(0).innerHTML);
+
+            var cssEditor = ace.edit('cssEditor');
+            cssEditor.getSession().setMode("ace/mode/css");
+            cssEditor.setValue(formatScript($('style').last().get(0).innerHTML));
+
+            var jsEditor = ace.edit('javascriptEditor');
+            jsEditor.getSession().setMode("ace/mode/javascript");
+            jsEditor.setValue(formatScript(demo.toString()));
+
+            demo();
         });
     </script>
 </head>
@@ -109,50 +143,19 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`C:\`</strong></div>
-                <input type="text" id="editor1" style="width: 400px;" />
+                <div id="demoHtml"><input type="text" id="editor1" style="width: 400px;" /></div>
             </div>
 
             <div class="tab-pane fade" id="js">
 
-                <div id="javascriptEditor" style="width: 100%; height: 400px;">
-// directory
-var directoryStructure =
-{
-    'c:': ['inetpub', 'Users', 'Temp', 'Windows'],
-    'c:\\inetpub': ['wwwroot'],
-    'c:\\users': ['jdoe', 'jsmith'],
-    'c:\\temp': ['logs'],
-    'c:\\windows': ['System', 'System32', 'SYSWOW64']
-};
-var $editor1 = $('#editor1');
-var intellisense1 = new TextBoxIntellisense('editor1');
-intellisense1.addDeclarationTrigger({ keyCode: 220 });
-intellisense1.onDeclaration(function (item)
-{
-    var val = $editor1.val().toLowerCase();
-    if (directoryStructure[val])
-    {
-        var data = directoryStructure[val]
-            .map(function (item)
-            {
-                return { name: item, glyph: 1 };
-            });
-
-        intellisense1.setDeclarations(data);
-    }
-});
-                </div>
+                <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
 
             </div>
             <div class="tab-pane fade" id="html">
-                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;input type="text" id="editor1" style="width: 400px;" /&gt;</div>
+                <div id="htmlEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="css">
-                <div id="cssEditor" style="width: 100%; height: 400px;">
-.icon-glyph-1 {
-    background-image: url('css/folder.png');
-}
-                </div>
+                <div id="cssEditor" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
 

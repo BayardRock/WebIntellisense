@@ -18,11 +18,6 @@
     <link href="js/references/codemirror-4.3/codemirror.css" rel="stylesheet" />
     <style type="text/css">
 
-        .tab-content {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-        }
-
         .icon-glyph-3 {
             background-image: url('css/method.png');
         }
@@ -30,7 +25,7 @@
     </style>
     <script type="text/javascript">
 
-        $(function ()
+        function demo()
         {
             // codemirror
             var editor4 = CodeMirror(document.getElementById('editor4'),
@@ -64,10 +59,44 @@
                 ];
                 intellisense4.setDeclarations(data);
             });
+        }
 
-            ace.edit('htmlEditor').getSession().setMode("ace/mode/html");
-            ace.edit('cssEditor').getSession().setMode("ace/mode/css");
-            ace.edit('javascriptEditor').getSession().setMode("ace/mode/javascript");
+        function formatScript(script)
+        {
+            var whiteSpaceCount = 0;
+            var lines = script.split('\n');
+            lines = lines.splice(2, lines.length - 3);
+            for (var i in lines[0])
+            {
+                var c = lines[0][i];
+                if (c !== ' ')
+                {
+                    break;
+                }
+                whiteSpaceCount++;
+            }
+            lines = lines.map(function (item)
+            {
+                return item.substring(whiteSpaceCount);
+            });
+            return lines.join('\n');
+        }
+
+        $(function ()
+        {
+            var htmlEditor = ace.edit('htmlEditor');
+            htmlEditor.getSession().setMode("ace/mode/html");
+            htmlEditor.setValue($('#demoHtml').get(0).innerHTML);
+
+            var cssEditor = ace.edit('cssEditor');
+            cssEditor.getSession().setMode("ace/mode/css");
+            cssEditor.setValue(formatScript($('style').last().get(0).innerHTML));
+
+            var jsEditor = ace.edit('javascriptEditor');
+            jsEditor.getSession().setMode("ace/mode/javascript");
+            jsEditor.setValue(formatScript(demo.toString()));
+
+            demo();
         });
     </script>
 </head>
@@ -123,56 +152,17 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`.` or `(`</strong></div>
-                <div id="editor4"></div>
+                <div id="demoHtml"><div id="editor4"></div></div>
             </div>
 
             <div class="tab-pane fade" id="js">
-
-                <div id="javascriptEditor" style="width: 100%; height: 400px;">
-// codemirror
-var editor4 = CodeMirror(document.getElementById('editor4'),
-{
-    value: "let x = 1",
-    mode: 'text/x-fsharp',
-    lineNumbers: true
-});
-
-var intellisense4 = new CodeMirrorIntellisense(editor4);
-intellisense4.addDeclarationTrigger({ keyCode: 190 });
-intellisense4.addMethodsTrigger({ keyCode: 57, shiftKey: true });
-intellisense4.addMethodsTrigger({ keyCode: 48, shiftKey: true });
-intellisense4.addMethodsTrigger({ keyCode: 8 });
-intellisense4.onMethod(function (item)
-{
-    if (item.keyCode === 48 || item.keyCode === 8)
-    {
-        intellisense4.getMeths().setVisible(false);
-    }
-    else
-    {
-        intellisense4.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
-    }
-});
-intellisense4.onDeclaration(function (item)
-{
-    var data = [
-        { glyph: 3, name: 'CompareTo', documentation: 'Converts to object to another object' },
-        { glyph: 3, name: 'ToString', documentation: 'Converts to object to a string' }
-    ];
-    intellisense4.setDeclarations(data);
-});
-                </div>
-
+                <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="html">
-                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;div id="editor4"&gt;&lt;/div&gt;</div>
+                <div id="htmlEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="css">
-                <div id="cssEditor" style="width: 100%; height: 400px;">
-                    .icon-glyph-3 {
-                    background-image: url('css/method.png');
-                    }
-                </div>
+                <div id="cssEditor" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
 

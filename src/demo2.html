@@ -15,11 +15,6 @@
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
 
-        .tab-content {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-        }
-
         .icon-glyph-2 {
             background-image: url('css/twitter.png');
         }
@@ -27,7 +22,7 @@
     </style>
     <script type="text/javascript">
 
-        $(function ()
+        function demo()
         {
             // twitter
             var $editor2 = $('#editor2');
@@ -48,10 +43,44 @@
                 ];
                 intellisense2.setDeclarations(data);
             });
+        }
 
-            ace.edit('htmlEditor').getSession().setMode("ace/mode/html");
-            ace.edit('cssEditor').getSession().setMode("ace/mode/css");
-            ace.edit('javascriptEditor').getSession().setMode("ace/mode/javascript");
+        function formatScript(script)
+        {
+            var whiteSpaceCount = 0;
+            var lines = script.split('\n');
+            lines = lines.splice(2, lines.length - 3);
+            for (var i in lines[0])
+            {
+                var c = lines[0][i];
+                if (c !== ' ')
+                {
+                    break;
+                }
+                whiteSpaceCount++;
+            }
+            lines = lines.map(function (item)
+            {
+                return item.substring(whiteSpaceCount);
+            });
+            return lines.join('\n');
+        }
+
+        $(function ()
+        {
+            var htmlEditor = ace.edit('htmlEditor');
+            htmlEditor.getSession().setMode("ace/mode/html");
+            htmlEditor.setValue($('#demoHtml').get(0).innerHTML);
+
+            var cssEditor = ace.edit('cssEditor');
+            cssEditor.getSession().setMode("ace/mode/css");
+            cssEditor.setValue(formatScript($('style').last().get(0).innerHTML));
+
+            var jsEditor = ace.edit('javascriptEditor');
+            jsEditor.getSession().setMode("ace/mode/javascript");
+            jsEditor.setValue(formatScript(demo.toString()));
+
+            demo();
         });
     </script>
 </head>
@@ -107,43 +136,17 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`@`</strong></div>
-                <input type="text" id="editor2" style="width: 400px;" />
+                <div id="demoHtml"><input type="text" id="editor2" style="width: 400px;" /></div>
             </div>
 
             <div class="tab-pane fade" id="js">
-
-                <div id="javascriptEditor" style="width: 100%; height: 400px;">
-// twitter
-var $editor2 = $('#editor2');
-var intellisense2 = new TextBoxIntellisense('editor2');
-intellisense2.addDeclarationTrigger({ keyCode: 50 });
-intellisense2.addDeclarationTrigger({ keyCode: 50, shiftKey: true });
-intellisense2.getDecls().setFilterMode(function (item, filterText)
-{
-    return item.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0
-        || item.value.toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
-});
-intellisense2.onDeclaration(function (item)
-{
-    var data = [
-        { glyph: 2, name: 'Peter Rosconi', value: 'prosconi' },
-        { glyph: 2, name: 'Richard Minerich', value: 'rminerich' },
-        { glyph: 2, name: 'Paul-Michael Blasucci', value: 'pblasucci' }
-    ];
-    intellisense2.setDeclarations(data);
-});
-                </div>
-
+                <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="html">
-                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;input type="text" id="editor2" style="width: 400px;" /&gt;</div>
+                <div id="htmlEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="css">
-                <div id="cssEditor" style="width: 100%; height: 400px;">
-                    .icon-glyph-2 {
-                    background-image: url('css/twitter.png');
-                    }
-                </div>
+                <div id="cssEditor" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
 

@@ -15,11 +15,6 @@
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
 
-        .tab-content {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-        }
-
         .icon-glyph-4 {
             background-image: url('css/html.png');
         }
@@ -31,7 +26,7 @@
     </style>
     <script type="text/javascript">
 
-        $(function ()
+        function demo()
         {
             // setup the ACE editor with html mode
             var AceIntellisense = ace.require('ace/intellisense').AceIntellisense;
@@ -75,10 +70,44 @@
                     intellisense5.setDeclarations(data);
                 }
             });
+        }
 
-            ace.edit('htmlEditor').getSession().setMode("ace/mode/html");
-            ace.edit('cssEditor').getSession().setMode("ace/mode/css");
-            ace.edit('javascriptEditor').getSession().setMode("ace/mode/javascript");
+        function formatScript(script)
+        {
+            var whiteSpaceCount = 0;
+            var lines = script.split('\n');
+            lines = lines.splice(2, lines.length - 3);
+            for (var i in lines[0])
+            {
+                var c = lines[0][i];
+                if (c !== ' ')
+                {
+                    break;
+                }
+                whiteSpaceCount++;
+            }
+            lines = lines.map(function (item)
+            {
+                return item.substring(whiteSpaceCount);
+            });
+            return lines.join('\n');
+        }
+
+        $(function ()
+        {
+            var htmlEditor = ace.edit('htmlEditor');
+            htmlEditor.getSession().setMode("ace/mode/html");
+            htmlEditor.setValue($('#demoHtml').get(0).innerHTML);
+
+            var cssEditor = ace.edit('cssEditor');
+            cssEditor.getSession().setMode("ace/mode/css");
+            cssEditor.setValue(formatScript($('style').last().get(0).innerHTML));
+
+            var jsEditor = ace.edit('javascriptEditor');
+            jsEditor.getSession().setMode("ace/mode/javascript");
+            jsEditor.setValue(formatScript(demo.toString()));
+
+            demo();
         });
     </script>
 </head>
@@ -133,70 +162,17 @@
                     This demo uses ACE intellisense. Declaration trigger on the keys `&lt;` or `&amp;`. Different documentation is shown for each declaration.
                     <em>The data shown is hard coded.</em>
                 </p>
-                <div id="editor5" style="height: 300px;"></div>
+                <div id="demoHtml"><div id="editor5" style="height: 300px;"></div></div>
             </div>
 
             <div class="tab-pane fade" id="js">
-
-                <div id="javascriptEditor" style="width: 100%; height: 400px;">
-// setup the ACE editor with html mode
-var AceIntellisense = ace.require('ace/intellisense').AceIntellisense;
-var editor5 = ace.edit('editor5');
-editor5.getSession().setMode("ace/mode/html");
-editor5.focus();
-
-var intellisense5 = new AceIntellisense(editor5);
-intellisense5.getDecls().setFilterMode('contains');
-intellisense5.addDeclarationTrigger({ keyCode: 55, shiftKey: true });
-intellisense5.addDeclarationTrigger({ keyCode: 188, shiftKey: true });
-intellisense5.addDeclarationTrigger({ keyCode: 190, shiftKey: true });
-intellisense5.onDeclaration(function (item)
-{
-    if (item.keyCode === 190)
-    {
-        intellisense5.getDecls().setVisible(false);
-    }
-    else if (item.keyCode === 55)
-    {
-        var codes = ['nbsp', 'lt', 'gt', 'cent', 'pound', 'curren', 'yen', 'brvbar', 'sect', 'uml', 'copy', 'ordf'];
-        var data = codes.map(function (code)
-        {
-            return { glyph: 5, name: '&amp;' + code + '; (&' + code + ')', value: code + ';' };
-        });
-        intellisense5.setDeclarations(data);
-    }
-    else
-    {
-        var data = [
-            { glyph: 4, name: 'body' },
-            { glyph: 4, name: 'div' },
-            { glyph: 4, name: 'head' },
-            { glyph: 4, name: 'html' },
-            { glyph: 4, name: 'link' },
-            { glyph: 4, name: 'p' },
-            { glyph: 4, name: 'script js', value: 'script type="text/javascript"' },
-            { glyph: 4, name: 'span' },
-            { glyph: 4, name: 'title' }
-        ];
-        intellisense5.setDeclarations(data);
-    }
-});
-                </div>
-
+                <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="html">
                 <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;div id="editor5" style="height: 300px;"&gt;&lt;/div&gt;</div>
             </div>
             <div class="tab-pane fade" id="css">
-                <div id="cssEditor" style="width: 100%; height: 400px;">
-                    .icon-glyph-4 {
-                    background-image: url('css/html.png');
-                    }
-
-                    .icon-glyph-5 {
-                    background-image: url('css/character.png');
-                    }
-                </div>
+                <div id="cssEditor" style="width: 100%; height: 400px;"></div>
             </div>
         </div>
 
