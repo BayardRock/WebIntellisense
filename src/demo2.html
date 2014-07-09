@@ -4,13 +4,13 @@
     <title>Web Intellisense - Folder Example</title>
     <script src="js/references/jquery-2.1.1.min.js"></script>
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-textbox.js"></script>
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-textbox.js"></script>
     <script src="js/references/ace-1.1.4/ace.js"></script>
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
@@ -24,24 +24,30 @@
 
         function demo()
         {
-            // twitter
-            var $editor2 = $('#editor2');
-            var intellisense2 = new TextBoxIntellisense('editor2');
-            intellisense2.addDeclarationTrigger({ keyCode: 50 });
-            intellisense2.addDeclarationTrigger({ keyCode: 50, shiftKey: true });
-            intellisense2.getDecls().setFilterMode(function (item, filterText)
+            var $editor = $('#editor');
+            var intellisense = new TextBoxIntellisense('editor');
+
+            // add triggers when the user presses the `@` key
+            intellisense.addDeclarationTrigger({ keyCode: 50 });  // 50 = `@`
+            intellisense.addDeclarationTrigger({ keyCode: 50, shiftKey: true });
+
+            // set the filter mode for the declarations list, this will search
+            // both the name and the value
+            intellisense.getDecls().setFilterMode(function (item, filterText)
             {
                 return item.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0
                     || item.value.toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
             });
-            intellisense2.onDeclaration(function (item)
+
+            // called when the declarations are triggered
+            intellisense.onDeclaration(function (item)
             {
                 var data = [
                     { glyph: 2, name: 'Peter Rosconi', value: 'prosconi' },
                     { glyph: 2, name: 'Richard Minerich', value: 'rminerich' },
                     { glyph: 2, name: 'Paul-Michael Blasucci', value: 'pblasucci' }
                 ];
-                intellisense2.setDeclarations(data);
+                intellisense.setDeclarations(data);
             });
         }
 
@@ -136,7 +142,7 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`@`</strong></div>
-                <div id="demoHtml"><input type="text" id="editor2" style="width: 400px;" /></div>
+                <div id="demoHtml"><input type="text" id="editor" style="width: 400px;" /></div>
             </div>
 
             <div class="tab-pane fade" id="js">

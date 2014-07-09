@@ -6,13 +6,13 @@
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
     <script src="js/references/codemirror-4.3/codemirror.js"></script>
     <script src="js/references/codemirror-4.3/mllike.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-codemirror.js"></script>
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-codemirror.js"></script>
     <script src="js/references/ace-1.1.4/ace.js"></script>
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="js/references/codemirror-4.3/codemirror.css" rel="stylesheet" />
@@ -28,36 +28,41 @@
         function demo()
         {
             // codemirror
-            var editor4 = CodeMirror(document.getElementById('editor4'),
+            var editor = CodeMirror(document.getElementById('editor'),
             {
                 value: "let x = 1",
                 mode: 'text/x-fsharp',
                 lineNumbers: true
             });
 
-            var intellisense4 = new CodeMirrorIntellisense(editor4);
-            intellisense4.addDeclarationTrigger({ keyCode: 190 });
-            intellisense4.addMethodsTrigger({ keyCode: 57, shiftKey: true });
-            intellisense4.addMethodsTrigger({ keyCode: 48, shiftKey: true });
-            intellisense4.addMethodsTrigger({ keyCode: 8 });
-            intellisense4.onMethod(function (item)
+            var intellisense = new CodeMirrorIntellisense(editor);
+            intellisense.addDeclarationTrigger({ keyCode: 190 }); // `.`
+            intellisense.addMethodsTrigger({ keyCode: 57, shiftKey: true }); // `(`
+            intellisense.addMethodsTrigger({ keyCode: 48, shiftKey: true });// `)`
+            intellisense.addMethodsTrigger({ keyCode: 8 }); // `backspace`
+
+            // called when the methods are triggered
+            intellisense.onMethod(function (item)
             {
+                // hide when the users presses `backspace` or `)`
                 if (item.keyCode === 48 || item.keyCode === 8)
                 {
-                    intellisense4.getMeths().setVisible(false);
+                    intellisense.getMeths().setVisible(false);
                 }
                 else
                 {
-                    intellisense4.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
+                    intellisense.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
                 }
             });
-            intellisense4.onDeclaration(function (item)
+
+            // called when the declarations are triggered
+            intellisense.onDeclaration(function (item)
             {
                 var data = [
                     { glyph: 3, name: 'CompareTo', documentation: 'Converts to object to another object' },
                     { glyph: 3, name: 'ToString', documentation: 'Converts to object to a string' }
                 ];
-                intellisense4.setDeclarations(data);
+                intellisense.setDeclarations(data);
             });
         }
 
@@ -152,7 +157,7 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`.` or `(`</strong></div>
-                <div id="demoHtml"><div id="editor4"></div></div>
+                <div id="demoHtml"><div id="editor"></div></div>
             </div>
 
             <div class="tab-pane fade" id="js">

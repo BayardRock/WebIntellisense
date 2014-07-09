@@ -8,9 +8,9 @@
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-ace.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-ace.js"></script>
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
@@ -30,21 +30,23 @@
         {
             // setup the ACE editor with html mode
             var AceIntellisense = ace.require('ace/intellisense').AceIntellisense;
-            var editor5 = ace.edit('editor5');
-            editor5.getSession().setMode("ace/mode/html");
-            editor5.focus();
+            var editor = ace.edit('editor');
+            editor.getSession().setMode("ace/mode/html");
+            editor.focus();
 
-            var intellisense5 = new AceIntellisense(editor5);
-            intellisense5.getDecls().setFilterMode('contains');
-            intellisense5.addDeclarationTrigger({ keyCode: 55, shiftKey: true });
-            intellisense5.addDeclarationTrigger({ keyCode: 188, shiftKey: true });
-            intellisense5.addDeclarationTrigger({ keyCode: 190, shiftKey: true });
-            intellisense5.onDeclaration(function (item)
+            var intellisense = new AceIntellisense(editor);
+            intellisense.getDecls().setFilterMode('contains');
+            intellisense.addDeclarationTrigger({ keyCode: 55, shiftKey: true }); // `&`
+            intellisense.addDeclarationTrigger({ keyCode: 188, shiftKey: true }); // `<`
+            intellisense.addDeclarationTrigger({ keyCode: 190, shiftKey: true }); // `>`
+            intellisense.onDeclaration(function (item)
             {
+                // when the user presses `>` hide the intellisense
                 if (item.keyCode === 190)
                 {
-                    intellisense5.getDecls().setVisible(false);
+                    intellisense.getDecls().setVisible(false);
                 }
+                // when the user presses `&` show the intellisense for escape characters
                 else if (item.keyCode === 55)
                 {
                     var codes = ['nbsp', 'lt', 'gt', 'cent', 'pound', 'curren', 'yen', 'brvbar', 'sect', 'uml', 'copy', 'ordf'];
@@ -52,8 +54,9 @@
                     {
                         return { glyph: 5, name: '&amp;' + code + '; (&' + code + ')', value: code + ';' };
                     });
-                    intellisense5.setDeclarations(data);
+                    intellisense.setDeclarations(data);
                 }
+                // otherwise pressed `<`
                 else
                 {
                     var data = [
@@ -67,7 +70,7 @@
                         { glyph: 4, name: 'span' },
                         { glyph: 4, name: 'title' }
                     ];
-                    intellisense5.setDeclarations(data);
+                    intellisense.setDeclarations(data);
                 }
             });
         }
@@ -162,14 +165,14 @@
                     This demo uses ACE intellisense. Declaration trigger on the keys `&lt;` or `&amp;`. Different documentation is shown for each declaration.
                     <em>The data shown is hard coded.</em>
                 </p>
-                <div id="demoHtml"><div id="editor5" style="height: 300px;"></div></div>
+                <div id="demoHtml"><div id="editor" style="height: 300px;"></div></div>
             </div>
 
             <div class="tab-pane fade" id="js">
                 <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
             </div>
             <div class="tab-pane fade" id="html">
-                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;div id="editor5" style="height: 300px;"&gt;&lt;/div&gt;</div>
+                <div id="htmlEditor" style="width: 100%; height: 400px;">&lt;div id="editor" style="height: 300px;"&gt;&lt;/div&gt;</div>
             </div>
             <div class="tab-pane fade" id="css">
                 <div id="cssEditor" style="width: 100%; height: 400px;"></div>

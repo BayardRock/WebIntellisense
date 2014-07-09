@@ -4,13 +4,13 @@
     <title>Web Intellisense - Folder Example</title>
     <script src="js/references/jquery-2.1.1.min.js"></script>
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-textbox.js"></script>
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-textbox.js"></script>
     <script src="js/references/ace-1.1.4/ace.js"></script>
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
@@ -24,7 +24,10 @@
 
         function demo()
         {
-            // directory
+            var $editor = $('#editor');
+            var intellisense = new TextBoxIntellisense('editor');
+
+            // the fake directory listing
             var directoryStructure =
             {
                 'c:': ['inetpub', 'Users', 'Temp', 'Windows'],
@@ -33,12 +36,14 @@
                 'c:\\temp': ['logs'],
                 'c:\\windows': ['System', 'System32', 'SYSWOW64']
             };
-            var $editor1 = $('#editor1');
-            var intellisense1 = new TextBoxIntellisense('editor1');
-            intellisense1.addDeclarationTrigger({ keyCode: 220 });
-            intellisense1.onDeclaration(function (item)
+
+            // add trigger when the user presses the `\` key
+            intellisense.addDeclarationTrigger({ keyCode: 220 }); // 220 = `\`
+
+            // called when the declarations are triggered
+            intellisense.onDeclaration(function (item)
             {
-                var val = $editor1.val().toLowerCase();
+                var val = $editor.val().toLowerCase();
                 if (directoryStructure[val])
                 {
                     var data = directoryStructure[val]
@@ -47,7 +52,7 @@
                             return { name: item, glyph: 1 };
                         });
 
-                    intellisense1.setDeclarations(data);
+                    intellisense.setDeclarations(data);
                 }
             });
         }
@@ -143,13 +148,11 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`C:\`</strong></div>
-                <div id="demoHtml"><input type="text" id="editor1" style="width: 400px;" /></div>
+                <div id="demoHtml"><input type="text" id="editor" style="width: 400px;" /></div>
             </div>
 
             <div class="tab-pane fade" id="js">
-
                 <div id="javascriptEditor" style="width: 100%; height: 400px;"></div>
-
             </div>
             <div class="tab-pane fade" id="html">
                 <div id="htmlEditor" style="width: 100%; height: 400px;"></div>

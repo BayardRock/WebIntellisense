@@ -4,13 +4,13 @@
     <title>Web Intellisense - Folder Example</title>
     <script src="js/references/jquery-2.1.1.min.js"></script>
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-textbox.js"></script>
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-textbox.js"></script>
     <script src="js/references/ace-1.1.4/ace.js"></script>
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <style type="text/css">
@@ -25,12 +25,18 @@
         function demo()
         {
             // code
-            var $editor3 = $('#editor3');
-            var intellisense3 = new TextBoxIntellisense('editor3');
-            intellisense3.getDecls().setFilterMode('contains');
-            intellisense3.addDeclarationTrigger({ keyCode: 190 });
-            intellisense3.addDeclarationTrigger({ keyCode: 32, ctrlKey: true, preventDefault: true });
-            intellisense3.onDeclaration(function (item)
+            var $editor = $('#editor');
+            var intellisense = new TextBoxIntellisense('editor');
+
+            // set the filter mode to filter by using the 'contains' predefined function
+            intellisense.getDecls().setFilterMode('contains');
+
+            // add trigger when the user presses the `.` key or `ctrl+space`
+            intellisense.addDeclarationTrigger({ keyCode: 190 }); // the `.` key
+            intellisense.addDeclarationTrigger({ keyCode: 32, ctrlKey: true, preventDefault: true }); // `ctrl+space`
+
+            // called when the declarations are triggered
+            intellisense.onDeclaration(function (item)
             {
                 var data = [
                     { name: 'Item #1', value: '``Item #1``', documentation: 'The first item' },
@@ -46,7 +52,7 @@
                     { name: 'Item #11', value: '``Item #11``', documentation: 'The eleventh item' },
                     { name: 'Item #12', value: '``Item #12``', documentation: 'The twelvth item' }
                 ];
-                intellisense3.setDeclarations(data);
+                intellisense.setDeclarations(data);
             });
         }
 
@@ -141,7 +147,7 @@
                     <em>The data shown is hard coded.</em>
                 </p>
                 <div>Type <strong>`.`</strong></div>
-                <div id="demoHtml"><textarea id="editor3" rows="10" cols="80"></textarea></div>
+                <div id="demoHtml"><textarea id="editor" rows="10" cols="80"></textarea></div>
             </div>
 
             <div class="tab-pane fade" id="js">
