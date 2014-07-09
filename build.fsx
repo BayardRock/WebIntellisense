@@ -104,30 +104,6 @@ Target "NuGet" (fun _ ->
         ("nuget/webintellisense.nuspec")
 )
 
-// --------------------------------------------------------------------------------------
-// Generate the documentation
-
-Target "GenerateDocs" (fun _ ->
-    let fsiArgs = if hasBuildParam "Release" then ["--define:RELEASE"] else []
-    executeFSIWithArgs "docs/tools" "generate.fsx" fsiArgs [] |> ignore
-)
-
-// --------------------------------------------------------------------------------------
-// Release scripts
-
-Target "ReleaseDocs" (fun _ ->
-    let ghPages      = "gh-pages"
-    let ghPagesLocal = "temp/gh-pages"
-    Repository.clone "temp" (gitHome + "/" + gitName + ".git") ghPages
-    Branches.checkoutBranch ghPagesLocal ghPages
-    CopyRecursive "src" ghPagesLocal true |> printfn "%A"
-    CommandHelper.runSimpleGitCommand ghPagesLocal "add ." |> printfn "%s"
-    let cmd = sprintf """commit -a -m "Update generated documentation for version %s""" release.NugetVersion
-    CommandHelper.runSimpleGitCommand ghPagesLocal cmd |> printfn "%s"
-    Branches.push ghPagesLocal
-)
-
-
 Target "All" DoNothing
 
 // dependencies
@@ -138,7 +114,5 @@ Target "All" DoNothing
 "All"
   ==> "NuGet"
   ==> "CleanDocs"
-  ==> "GenerateDocs"
-  ==> "ReleaseDocs"
 
 RunTargetOrDefault "All"
