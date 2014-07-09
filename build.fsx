@@ -99,7 +99,7 @@ Target "NuGet" (fun _ ->
             OutputPath = "bin"
             ToolPath = nugetPath
             AccessKey = getBuildParamOrDefault "nugetkey" ""
-            Publish = hasBuildParam "nugetkey"
+            Publish = true
             Dependencies = [] })
         ("nuget/webintellisense.nuspec")
 )
