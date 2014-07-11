@@ -7,12 +7,14 @@ function DeclarationItem (name, value, glyph, documentation)
     /** 
      * The name displayed in the user interface
      * @type {string} 
+     * @property name
      */
     this.name = name;
 
     /**
      * The value that is replaced when a declaration is selected by the user
      * @type {string}
+     * @property value
      */
     this.value = value;
 
@@ -27,12 +29,14 @@ function DeclarationItem (name, value, glyph, documentation)
      *   }
      * 
      * @type {int}
+     * @property glyph
      */
     this.glyph = glyph;
 
     /** 
      * A piece of documentation to display when this item is selected by the user.
      * @type {string}
+     * @property documentation
      */
     this.documentation = documentation;
 }
@@ -93,6 +97,7 @@ var Utils = function ()
      * @param {string} str - The string to search within
      * @param {string[]} arr - An array of strings to search for
      * @param {number} [start] - Optional starting position
+     * @function lastIndexOfAny
      */
     this.lastIndexOfAny = lastIndexOfAny;
 
@@ -100,6 +105,7 @@ var Utils = function ()
      * Removes a CSS class from an element
      * @param {HTMLElement} element - The element to remove the class
      * @param {string} name - The name of the class to remove
+     * @function removeCssClass
      */
     this.removeCssClass = removeCssClass;
 
@@ -107,6 +113,7 @@ var Utils = function ()
      * Adds a CSS class from an element
      * @param {HTMLElement} element - The element to add the class
      * @param {string} name - The name of the class to add
+     * @function addCssClass
      */
     this.addCssClass = addCssClass;
 
@@ -114,6 +121,7 @@ var Utils = function ()
      * Checks to see if an element has a CSS class
      * @param {HTMLElement} element - The element to add the class
      * @returns {boolean}
+     * @function hasCssClass
      */
     this.hasCssClass = hasCssClass;
 
@@ -122,6 +130,7 @@ var Utils = function ()
      * or 'none' for false.
      * @param {HTMLElement} element - The element to show or hide
      * @param {boolean} b
+     * @function showElement
      */
     this.showElement = showElement;
 };
@@ -189,13 +198,53 @@ var Tooltip = function ()
         tooltipElement.style.top = top + 'px';
     }
 
-    this.triggerVisibleChanged = triggerVisibleChanged;
+    /**
+     * Check to see if the user interface is visible or not
+     * @function isVisible
+     * @returns {bool} True if visible otherwise false
+     */
     this.isVisible = function () { return visible; };
+
+    /**
+     * Sets the visibility of the tooltip element
+     * @param {bool} b True to set visible, false to hide
+     * @function setVisible
+     */
     this.setVisible = setVisible;
+
+    /**
+     * Sets the text of the tooltip element
+     * @param {string} text The text to set
+     * @function setText
+     */
     this.setText = setText;
+
+    /**
+     * Sets the HTML of the tooltip element
+     * @param {string} html The html to set
+     * @function setHtml
+     */
     this.setHtml = setHtml;
+
+    /**
+     * Gets the inner text of the tooltip element
+     * @function getText
+     * @returns {string} The inner text of the element
+     */
     this.getText = getText;
+
+    /**
+     * Gets the inner html of the tooltip elemnt
+     * @function getHtml The inner html of the element
+     */
     this.getHtml = getHtml;
+
+    /**
+     * Sets the position on screen of the tooltip element
+     * @param {int} left The left pixel position
+     * @param {int} top The top pixel position
+     * @function setPosition
+     */
     this.setPosition = setPosition;
 };
 
@@ -364,12 +413,14 @@ var MethodsIntellisense = function ()
 
     /**
      * Shows or hides the UI
+     * @function setVisible
      * @param {boolean} b
      */
     this.setVisible = setVisible;
 
     /**
      * Checks to see if the UI is visible
+     * @function isVisible
      * @returns {boolean}
      */
     this.isVisible = isVisible;
@@ -377,6 +428,7 @@ var MethodsIntellisense = function ()
     /**
      * Sets the selected item by index. Wrapping is performed if the index
      * specified is out of bounds of the methods that are set.
+     * @function setSelectedIndex
      * @param {int} idx - The index of the item to set selected
      */
     this.setSelectedIndex = setSelectedIndex;
@@ -384,18 +436,21 @@ var MethodsIntellisense = function ()
     /**
      * Sets the methods to display. If not empty, the user interface is shown and the
      * first methods is selected.
+     * @function setMethods
      * @param {string[]} methods - The methods to populate the interface with
      */
     this.setMethods = setMethods;
 
     /**
      * Sets the currently selected index by delta.
+     * @function moveSelected
      * @param {int} delta
      */
     this.moveSelected = moveSelected;
 
     /**
      * Sets the position of the UI element.
+     * @function setPosition
      * @param {int} left
      * @param {int} top
      */
@@ -410,12 +465,14 @@ var MethodsIntellisense = function ()
      * pageup -> select previous 5th
      * pagedown -> select next 5th
      * 
+     * @function handleKeyDown
      * @param {HTMLEvent} evt - The event
      */
     this.handleKeyDown = handleKeyDown;
 
     /**
      * Adds an event listener for the `onVisibleChanged` event
+     * @function onVisibleChanged
      * @param {function} callback
      */
     this.onVisibleChanged = onVisibleChanged;
@@ -729,6 +786,7 @@ var DeclarationsIntellisense = function ()
      * automatically filtered
      * 
      * @param {string} f - The filter to set
+     * @function setFilter
      */
     this.setFilter = setFilter;
 
@@ -743,48 +801,56 @@ var DeclarationsIntellisense = function ()
      * substring of the filter text in the `name` property of the item.
      * 
      * @param {string|function(item, string)} mode - The mode to set
+     * @function setFilterMode
      */
     this.setFilterMode = setFilterMode;
 
     /**
      * Gets the selected item
      * @returns {DeclartionItem}
+     * @function getSelectedItem
      */
     this.getSelectedItem = getSelectedItem;
 
     /**
      * Gets the currently selected index
      * @returns {int}
+     * @function getSelectedIndex
      */
     this.getSelectedIndex = getSelectedIndex;
 
     /**
      * Sets the currently selected index
      * @param {int} idx
+     * @function setSelectedIndex
      */
     this.setSelectedIndex = setSelectedIndex;
 
     /**
      * Adds an event listener for the `onItemChosen` event
      * @param {function} callback
+     * @function onItemChosen
      */
     this.onItemChosen = onItemChosen;
 
     /**
      * Adds an event listener for the `onItemSelected` event
      * @param {function} callback
+     * @function onItemSelected
      */
     this.onItemSelected = onItemSelected;
 
     /**
      * Adds an event listener for the `onVisibleChanged` event
      * @param {function} callback
+     * @function onVisibleChanged
      */
     this.onVisibleChanged = onVisibleChanged;
 
     /**
      * Sets the currently selected index by delta.
      * @param {int} delta
+     * @function moveSelected
      */
     this.moveSelected = moveSelected;
 
@@ -792,6 +858,7 @@ var DeclarationsIntellisense = function ()
      * Sets the declarations to display. If not empty, the user interface is shown and the
      * first item is selected.
      * @param {DeclartionItem[]} data - The array of declaration items to show
+     * @function setDeclarations
      */
     this.setDeclarations = setDeclarations;
 
@@ -799,17 +866,20 @@ var DeclarationsIntellisense = function ()
      * Sets the position of the UI element.
      * @param {int} left
      * @param {int} top
+     * @function setPosition
      */
     this.setPosition = setPosition;
 
     /**
      * Checks to see if the UI is visible
+     * @function setVisible
      * @returns {boolean}
      */
     this.setVisible = setVisible;
 
     /** 
      * Check to see if the declarations div is visible 
+     * @function isVisible
      * @returns {boolean}
      */
     this.isVisible = isVisible;
@@ -825,6 +895,7 @@ var DeclarationsIntellisense = function ()
      * enter, tab -> chooses the currently selected item
      * 
      * @param {HTMLEvent} evt - The event
+     * @function handleKeyDown
      */
     this.handleKeyDown = handleKeyDown;
 };

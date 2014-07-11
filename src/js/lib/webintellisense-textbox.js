@@ -2,13 +2,32 @@
  * Simple data structure for providing a keyboard event to trigger the showing
  * of the DeclarationsIntellisense or MethodsIntellisense user interfaces.
  * 
- * @class
+ * @class KeyTrigger
  */
 var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault)
 {
+    /**
+     * The key code from the keyboard that should trigger a callback
+     * @property keyCode
+     */
     this.keyCode = keyCode;
+
+    /**
+     * Should the shift key be depressed in order to trigger a callback
+     * @property shiftKey
+     */
     this.shiftKey = shiftKey;
+
+    /**
+     * Should the ctrl key be depressed in order to trigger a callback
+     * @property ctrlKey
+     */
     this.ctrlKey = ctrlKey;
+
+    /**
+     * Should the event be prevented from propagating
+     * @property preventDefault
+     */
     this.preventDefault = preventDefault;
 };
 
@@ -17,7 +36,7 @@ var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault)
  * Triggers can be added 
  * 
  * @param {string|HTMLElement} editor - The id of a textarea or inputbox or the actual element
- * @class 
+ * @class TextBoxIntellisense
  */
 var TextBoxIntellisense = function (editor)
 {

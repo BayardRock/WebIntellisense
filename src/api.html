@@ -4,15 +4,29 @@
     <title>Web Intellisense - API</title>
     <script src="js/references/jquery-2.1.1.min.js"></script>
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-textbox.js"></script>
-    <script src="js/references/ace-1.1.4/ace.js"></script>
-    <script src="js/references/ace-1.1.4/mode-html.js"></script>
-    <script src="js/references/ace-1.1.4/mode-css.js"></script>
-    <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
+    <style>
+        pre {
+            font-family: Consolas, 'Lucida Console', 'DejaVu Sans Mono', monospace;
+        }
+
+        h4 {
+            background-color: #fff5df;
+            padding: 3px;
+        }
+
+        .class {
+            padding-left: 15px;
+            padding-right: 15px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .function {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
 </head>
 <body>
 
@@ -52,7 +66,1329 @@
 
     <div class="main">
         <h1>API</h1>
-        <p>Not yet implemented</p>
+        <h2>Classes</h2>
+        <ul>
+            <li><a href="#AceIntellisense">AceIntellisense</a></li>
+            <li><a href="#CodeMirrorIntellisense">CodeMirrorIntellisense</a></li>
+            <li><a href="#KeyTrigger">KeyTrigger</a></li>
+            <li><a href="#TextBoxIntellisense">TextBoxIntellisense</a></li>
+            <li><a href="#DeclarationItem">DeclarationItem</a></li>
+            <li><a href="#Utils">Utils</a></li>
+            <li><a href="#Tooltip">Tooltip</a></li>
+            <li><a href="#MethodsIntellisense">MethodsIntellisense</a></li>
+            <li><a href="#DeclarationsIntellisense">DeclarationsIntellisense</a></li>
+        </ul>
+        <a name="AceIntellisense"></a>
+        <h3>AceIntellisense</h3>
+        <div class="class">
+            <h4>function - getTooltip</h4>
+            <div class="function">
+                <p>
+                    Gets the tooltip user interface
+                </p>
+            </div>
+            <h4>function - getDecls</h4>
+            <div class="function">
+                <p>
+                    Gets the declarations user interface
+                </p>
+            </div>
+            <h4>function - getMeths</h4>
+            <div class="function">
+                <p>
+                    Gets the methods user interface
+                </p>
+            </div>
+            <h4>function - addDeclarationTrigger</h4>
+            <div class="function">
+                <p>
+                    Adds a trigger to the list of triggers that can cause the declarations user interface to popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>trigger</td>
+                            <td><a href="#KeyTrigger">KeyTrigger</a></td>
+                            <td> The trigger to add</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onDeclaration</h4>
+            <div class="function">
+                <p>
+                    Sets a callback to invoke when a key is pressed that causes the declarations list to popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td> The callback to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onMethod</h4>
+            <div class="function">
+                <p>
+                    Sets a callback to invoke when a key is pressed that causes the methods list to popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td> The callback to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onTooltip</h4>
+            <div class="function">
+                <p>
+                    Sets a callback to invoke when the user hovers for a short period of time
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td> The callback to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setTooltipData</h4>
+            <div class="function">
+                <p>
+                    Sets the data necessary to display a tooltip
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td>string</td>
+                            <td> The text to display for the tooltip</td>
+                        </tr>
+                        <tr>
+                            <td>lineIndex</td>
+                            <td>int</td>
+                            <td> The line index where the tooltip is on</td>
+                        </tr>
+                        <tr>
+                            <td>startColumnIndex</td>
+                            <td>int</td>
+                            <td> The starting column where the tooltip should be displayed if the mouse leaves</td>
+                        </tr>
+                        <tr>
+                            <td>endColumnIndex</td>
+                            <td>int</td>
+                            <td> The ending column where the tooltip will no longer be displayed if the mouse leaves</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setMethods</h4>
+            <div class="function">
+                <p>
+                    Delegate for setting the methods to display to the user
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>data</td>
+                            <td>string[]</td>
+                            <td> The methods to display</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setDeclarations</h4>
+            <div class="function">
+                <p>
+                    Delegate for setting the declarations to display to the user
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>data</td>
+                            <td>DeclarationItem[]</td>
+                            <td> The declarations to display</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setStartColumnIndex</h4>
+            <div class="function">
+                <p>
+                    Sets the starting location where filtering can occur. This is set when
+                    a trigger happens that would cause the declarations list to show
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>i</td>
+                            <td>int</td>
+                            <td> The index to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - getFilterText</h4>
+            <div class="function">
+                <p>
+                    Gets the text after startColumnIndex but before caret offset.
+                </p>
+            </div>
+        </div>
+        <a name="CodeMirrorIntellisense"></a>
+        <h3>CodeMirrorIntellisense</h3>
+        <div class="class">
+            <h4>function - getDecls</h4>
+            <div class="function">
+                <p>
+                    Gets the declarations user interface
+                </p>
+            </div>
+            <h4>function - getMeths</h4>
+            <div class="function">
+                <p>
+                    Gets the methods user interface
+                </p>
+            </div>
+            <h4>function - addDeclarationTrigger</h4>
+            <div class="function">
+                <p>
+                    Adds a trigger to the list of triggers that can cause the declarations user interface
+                    to popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>trigger</td>
+                            <td><a href="#KeyTrigger">KeyTrigger</a></td>
+                            <td> The trigger to add</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - addMethodsTrigger</h4>
+            <div class="function">
+                <p>
+                    Adds a trigger to the list of triggers that can cause the methods user interface
+                    to popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>trigger</td>
+                            <td><a href="#KeyTrigger">KeyTrigger</a></td>
+                            <td> The trigger to add</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onDeclaration</h4>
+            <div class="function">
+                <p>
+                    Sets a callback to invoke when a key is pressed that causes the declarations list to
+                    popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td> The callback to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onMethod</h4>
+            <div class="function">
+                <p>
+                    Sets a callback to invoke when a key is pressed that causes the methods list to
+                    popup.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td> The callback to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setMethods</h4>
+            <div class="function">
+                <p>
+                    Delegate for setting the methods to display to the user
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>data</td>
+                            <td>string[]</td>
+                            <td> The methods to display</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setDeclarations</h4>
+            <div class="function">
+                <p>
+                    Delegate for setting the declarations to display to the user
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>data</td>
+                            <td>DeclarationItem[]</td>
+                            <td> The declarations to display</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setStartColumnIndex</h4>
+            <div class="function">
+                <p>
+                    Sets the starting location where filtering can occur. This is set when
+                    a trigger happens that would cause the declarations list to show
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>i</td>
+                            <td>int</td>
+                            <td> The index to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - getFilterText</h4>
+            <div class="function">
+                <p>
+                    Gets the text after startColumnIndex but before caret offset.
+                </p>
+            </div>
+        </div>
+        <a name="DeclarationItem"></a>
+        <h3>DeclarationItem</h3>
+        <div class="class">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="3">Members</th>
+                    </tr>
+                    <tr>
+                        <th width="100">Name</th>
+                        <th width="100">Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>name</td>
+                        <td></td>
+                        <td>The name displayed in the user interface</td>
+                    </tr>
+                    <tr>
+                        <td>value</td>
+                        <td></td>
+                        <td>The value that is replaced when a declaration is selected by the user</td>
+                    </tr>
+                    <tr>
+                        <td>glyph</td>
+                        <td></td>
+                        <td>
+                            A number that represents what image to display for this item. The css class
+                            for the user interface item is `icon-glyph-{glyph}`. For example: `icon-glyph-1`.
+                            An example CSS selector:
+                            .icon-glyph-1 {
+                            background-image: url('css/folder.png');
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>documentation</td>
+                        <td></td>
+                        <td>A piece of documentation to display when this item is selected by the user.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a name="DeclarationsIntellisense"></a>
+        <h3>DeclarationsIntellisense</h3>
+        <div class="class">
+            <h4>function - setFilter</h4>
+            <div class="function">
+                <p>
+                    Setter for the filter text. When set, the items displayed are
+                    automatically filtered
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>f</td>
+                            <td>string</td>
+                            <td> The filter to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setFilterMode</h4>
+            <div class="function">
+                <p>
+                    Setter for how the filter behaves. There are two default implementations
+                    startsWith and contains.
+                    The `startsWith` mode checks that the `name` property
+                    of the item starts with the filter text
+                    The `contains` mode checks for any
+                    substring of the filter text in the `name` property of the item.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{string|function(item,</td>
+                            <td></td>
+                            <td>string)} mode - The mode to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - getSelectedItem</h4>
+            <div class="function">
+                <p>
+                    Gets the selected item
+                </p>
+            </div>
+            <h4>function - getSelectedIndex</h4>
+            <div class="function">
+                <p>
+                    Gets the currently selected index
+                </p>
+            </div>
+            <h4>function - setSelectedIndex</h4>
+            <div class="function">
+                <p>
+                    Sets the currently selected index
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>idx</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onItemChosen</h4>
+            <div class="function">
+                <p>
+                    Adds an event listener for the `onItemChosen` event
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onItemSelected</h4>
+            <div class="function">
+                <p>
+                    Adds an event listener for the `onItemSelected` event
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onVisibleChanged</h4>
+            <div class="function">
+                <p>
+                    Adds an event listener for the `onVisibleChanged` event
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - moveSelected</h4>
+            <div class="function">
+                <p>
+                    Sets the currently selected index by delta.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>delta</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setDeclarations</h4>
+            <div class="function">
+                <p>
+                    Sets the declarations to display. If not empty, the user interface is shown and the
+                    first item is selected.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>data</td>
+                            <td>DeclartionItem[]</td>
+                            <td> The array of declaration items to show</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setPosition</h4>
+            <div class="function">
+                <p>
+                    Sets the position of the UI element.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>left</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>top</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setVisible</h4>
+            <div class="function">
+                <p>
+                    Checks to see if the UI is visible
+                </p>
+            </div>
+            <h4>function - isVisible</h4>
+            <div class="function">
+                <p>
+                    Check to see if the declarations div is visible
+                </p>
+            </div>
+            <h4>function - handleKeyDown</h4>
+            <div class="function">
+                <p>
+                    Provides common keyboard event handling for a keydown event.
+                    escape, left, right -> hide the UI
+                    up -> select previous item
+                    down -> select next item
+                    pageup -> select previous 5th
+                    pagedown -> select next 5th
+                    enter, tab -> chooses the currently selected item
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>evt</td>
+                            <td>HTMLEvent</td>
+                            <td> The event</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a name="KeyTrigger"></a>
+        <h3>KeyTrigger</h3>
+        <div class="class">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="3">Members</th>
+                    </tr>
+                    <tr>
+                        <th width="100">Name</th>
+                        <th width="100">Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>keyCode</td>
+                        <td></td>
+                        <td>The key code from the keyboard that should trigger a callback</td>
+                    </tr>
+                    <tr>
+                        <td>shiftKey</td>
+                        <td></td>
+                        <td>Should the shift key be depressed in order to trigger a callback</td>
+                    </tr>
+                    <tr>
+                        <td>ctrlKey</td>
+                        <td></td>
+                        <td>Should the ctrl key be depressed in order to trigger a callback</td>
+                    </tr>
+                    <tr>
+                        <td>preventDefault</td>
+                        <td></td>
+                        <td>Should the event be prevented from propagating</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a name="MethodsIntellisense"></a>
+        <h3>MethodsIntellisense</h3>
+        <div class="class">
+            <h4>function - setVisible</h4>
+            <div class="function">
+                <p>
+                    Shows or hides the UI
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>b</td>
+                            <td>boolean</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - isVisible</h4>
+            <div class="function">
+                <p>
+                    Checks to see if the UI is visible
+                </p>
+            </div>
+            <h4>function - setSelectedIndex</h4>
+            <div class="function">
+                <p>
+                    Sets the selected item by index. Wrapping is performed if the index
+                    specified is out of bounds of the methods that are set.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>idx</td>
+                            <td>int</td>
+                            <td> The index of the item to set selected</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setMethods</h4>
+            <div class="function">
+                <p>
+                    Sets the methods to display. If not empty, the user interface is shown and the
+                    first methods is selected.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>methods</td>
+                            <td>string[]</td>
+                            <td> The methods to populate the interface with</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - moveSelected</h4>
+            <div class="function">
+                <p>
+                    Sets the currently selected index by delta.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>delta</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setPosition</h4>
+            <div class="function">
+                <p>
+                    Sets the position of the UI element.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>left</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>top</td>
+                            <td>int</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - handleKeyDown</h4>
+            <div class="function">
+                <p>
+                    Provides common keyboard event handling for a keydown event.
+                    escape, left, right -> hide the UI
+                    up -> select previous item
+                    down -> select next item
+                    pageup -> select previous 5th
+                    pagedown -> select next 5th
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>evt</td>
+                            <td>HTMLEvent</td>
+                            <td> The event</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - onVisibleChanged</h4>
+            <div class="function">
+                <p>
+                    Adds an event listener for the `onVisibleChanged` event
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td>function</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a name="TextBoxIntellisense"></a>
+        <h3>TextBoxIntellisense</h3>
+        <div class="class">
+        </div>
+        <a name="Tooltip"></a>
+        <h3>Tooltip</h3>
+        <div class="class">
+            <h4>function - isVisible</h4>
+            <div class="function">
+                <p>
+                    Check to see if the user interface is visible or not
+                </p>
+            </div>
+            <h4>function - setVisible</h4>
+            <div class="function">
+                <p>
+                    Sets the visibility of the tooltip element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>b</td>
+                            <td>bool</td>
+                            <td>True to set visible, false to hide</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setText</h4>
+            <div class="function">
+                <p>
+                    Sets the text of the tooltip element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td>string</td>
+                            <td>The text to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - setHtml</h4>
+            <div class="function">
+                <p>
+                    Sets the HTML of the tooltip element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>html</td>
+                            <td>string</td>
+                            <td>The html to set</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - getText</h4>
+            <div class="function">
+                <p>
+                    Gets the inner text of the tooltip element
+                </p>
+            </div>
+            <h4>function - getHtml The inner html of the element</h4>
+            <div class="function">
+                <p>
+                    Gets the inner html of the tooltip elemnt
+                </p>
+            </div>
+            <h4>function - setPosition</h4>
+            <div class="function">
+                <p>
+                    Sets the position on screen of the tooltip element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>left</td>
+                            <td>int</td>
+                            <td>The left pixel position</td>
+                        </tr>
+                        <tr>
+                            <td>top</td>
+                            <td>int</td>
+                            <td>The top pixel position</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a name="Utils"></a>
+        <h3>Utils</h3>
+        <div class="class">
+            <h4>function - lastIndexOfAny</h4>
+            <div class="function">
+                <p>
+                    Looks for the last index of a number of strings inside of another string
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>str</td>
+                            <td>string</td>
+                            <td> The string to search within</td>
+                        </tr>
+                        <tr>
+                            <td>arr</td>
+                            <td>string[]</td>
+                            <td> An array of strings to search for</td>
+                        </tr>
+                        <tr>
+                            <td>[start]</td>
+                            <td>number</td>
+                            <td> Optional starting position</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - removeCssClass</h4>
+            <div class="function">
+                <p>
+                    Removes a CSS class from an element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>element</td>
+                            <td>HTMLElement</td>
+                            <td> The element to remove the class</td>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td> The name of the class to remove</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - addCssClass</h4>
+            <div class="function">
+                <p>
+                    Adds a CSS class from an element
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>element</td>
+                            <td>HTMLElement</td>
+                            <td> The element to add the class</td>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td> The name of the class to add</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - hasCssClass</h4>
+            <div class="function">
+                <p>
+                    Checks to see if an element has a CSS class
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>element</td>
+                            <td>HTMLElement</td>
+                            <td> The element to add the class</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>function - showElement</h4>
+            <div class="function">
+                <p>
+                    Shows or hides an element by setting the display style to 'block' for true
+                    or 'none' for false.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Members</th>
+                        </tr>
+                        <tr>
+                            <th width="100">Name</th>
+                            <th width="100">Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>element</td>
+                            <td>HTMLElement</td>
+                            <td> The element to show or hide</td>
+                        </tr>
+                        <tr>
+                            <td>b</td>
+                            <td>boolean</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
     </div>
 
 </body>

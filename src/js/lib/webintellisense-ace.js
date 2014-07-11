@@ -10,7 +10,7 @@
          * Triggers can be added 
          * 
          * @param {string|HTMLElement} editor - The id of a textarea or inputbox or the actual element
-         * @class 
+         * @class AceIntellisense
          */
         var AceIntellisense = function (editor)
         {
@@ -271,24 +271,28 @@
             /**
              * Gets the tooltip user interface
              * @return {Tooltip}
+             * @function getTooltip
              */
             this.getTooltip = function () { return tooltip; };
 
             /**
              * Gets the declarations user interface
              * @returns {DeclarationsIntellisense}
+             * @function getDecls
              */
             this.getDecls = function () { return decls; };
 
             /**
              * Gets the methods user interface
              * @returns {MethodsIntellisense}
+             * @function getMeths
              */
             this.getMeths = function () { return meths; };
 
             /**
              * Adds a trigger to the list of triggers that can cause the declarations user interface to popup.
              * @param {KeyTrigger} trigger - The trigger to add
+             * @function addDeclarationTrigger
              */
             this.addDeclarationTrigger = addDeclarationTrigger;
 
@@ -301,18 +305,21 @@
             /**
              * Sets a callback to invoke when a key is pressed that causes the declarations list to popup.
              * @param {function} callback - The callback to set
+             * @function onDeclaration
              */
             this.onDeclaration = onDeclaration;
 
             /**
              * Sets a callback to invoke when a key is pressed that causes the methods list to popup.
              * @param {function} callback - The callback to set
+             * @function onMethod
              */
             this.onMethod = onMethod;
 
             /**
              * Sets a callback to invoke when the user hovers for a short period of time
              * @param {function} callback - The callback to set
+             * @function onTooltip
              */
             this.onTooltip = onTooltip;
 
@@ -323,18 +330,21 @@
              * @param {int} lineIndex - The line index where the tooltip is on
              * @param {int} startColumnIndex - The starting column where the tooltip should be displayed if the mouse leaves
              * @param {int} endColumnIndex - The ending column where the tooltip will no longer be displayed if the mouse leaves
+             * @function setTooltipData
              */
             this.setTooltipData = setTooltipData;
 
             /**
              * Delegate for setting the methods to display to the user
              * @param {string[]} data - The methods to display
+             * @function setMethods
              */
             this.setMethods = function (data) { meths.setMethods(data); };
 
             /**
              * Delegate for setting the declarations to display to the user
              * @param {DeclarationItem[]} data - The declarations to display
+             * @function setDeclarations
              */
             this.setDeclarations = function (data) { decls.setDeclarations(data); };
 
@@ -342,12 +352,14 @@
              * Sets the starting location where filtering can occur. This is set when
              * a trigger happens that would cause the declarations list to show
              * @param {int} i - The index to set
+             * @function setStartColumnIndex
              */
             this.setStartColumnIndex = function (i) { autoCompleteStart.columnIndex = i; };
 
             /**
              * Gets the text after startColumnIndex but before caret offset.
              * @returns {int}
+             * @function getFilterText
              */
             this.getFilterText = getFilterText;
         };

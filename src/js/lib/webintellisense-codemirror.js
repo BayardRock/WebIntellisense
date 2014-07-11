@@ -3,7 +3,7 @@
  * Triggers can be added 
  * 
  * @param {string|HTMLElement} editor - The id of a textarea or inputbox or the actual element
- * @class 
+ * @class CodeMirrorIntellisense
  */
 var CodeMirrorIntellisense = function (editor)
 {
@@ -113,12 +113,6 @@ var CodeMirrorIntellisense = function (editor)
         editor.focus();
     });
 
-    /**
-     * Adds a trigger to the list of triggers that can cause the declarations user interface
-     * to popup.
-     * @instance
-     * @param {KeyTrigger} trigger - The trigger to add
-     */
     function addDeclarationTrigger(trigger)
     {
         declsTriggers.push(trigger);
@@ -152,21 +146,31 @@ var CodeMirrorIntellisense = function (editor)
     /**
      * Gets the declarations user interface
      * @returns {DeclarationsIntellisense}
+     * @function getDecls
      */
     this.getDecls = function () { return decls; };
 
     /**
      * Gets the methods user interface
      * @returns {MethodsIntellisense}
+     * @function getMeths
      */
     this.getMeths = function () { return meths; };
 
+    /**
+     * Adds a trigger to the list of triggers that can cause the declarations user interface
+     * to popup.
+     * @instance
+     * @param {KeyTrigger} trigger - The trigger to add
+     * @function addDeclarationTrigger
+     */
     this.addDeclarationTrigger = addDeclarationTrigger;
 
     /**
      * Adds a trigger to the list of triggers that can cause the methods user interface
      * to popup.
      * @param {KeyTrigger} trigger - The trigger to add
+     * @function addMethodsTrigger
      */
     this.addMethodsTrigger = addMethodsTrigger;
 
@@ -174,6 +178,7 @@ var CodeMirrorIntellisense = function (editor)
      * Sets a callback to invoke when a key is pressed that causes the declarations list to
      * popup.
      * @param {function} callback - The callback to set
+     * @function onDeclaration
      */
     this.onDeclaration = onDeclaration;
 
@@ -181,18 +186,21 @@ var CodeMirrorIntellisense = function (editor)
      * Sets a callback to invoke when a key is pressed that causes the methods list to
      * popup.
      * @param {function} callback - The callback to set
+     * @function onMethod
      */
     this.onMethod = onMethod;
 
     /**
      * Delegate for setting the methods to display to the user
      * @param {string[]} data - The methods to display
+     * @function setMethods
      */
     this.setMethods = function (data) { meths.setMethods(data); };
 
     /**
      * Delegate for setting the declarations to display to the user
      * @param {DeclarationItem[]} data - The declarations to display
+     * @function setDeclarations
      */
     this.setDeclarations = function (data) { decls.setDeclarations(data); };
 
@@ -200,12 +208,14 @@ var CodeMirrorIntellisense = function (editor)
      * Sets the starting location where filtering can occur. This is set when
      * a trigger happens that would cause the declarations list to show
      * @param {int} i - The index to set
+     * @function setStartColumnIndex
      */
     this.setStartColumnIndex = function (i) { autoCompleteStart.columnIndex = i; };
 
     /**
      * Gets the text after startColumnIndex but before caret offset.
      * @returns {int}
+     * @function getFilterText
      */
     this.getFilterText = getFilterText;
 };
