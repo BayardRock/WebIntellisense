@@ -1,6 +1,6 @@
 ﻿/**
  * An item that is displayed within the declarations user interface.
- * @class
+ * @class DeclarationItem
  */
 function DeclarationItem (name, value, glyph, documentation)
 {
@@ -39,7 +39,7 @@ function DeclarationItem (name, value, glyph, documentation)
 
 /**
  * Provides some utility methods.
- * @class
+ * @class Utils
  */
 var Utils = function ()
 {
@@ -127,9 +127,83 @@ var Utils = function ()
 };
 
 /**
+ * Provides a user interface for a tooltip.
+ * @class Tooltip
+ */
+var Tooltip = function ()
+{
+    var visible = false;
+    var events = { visibleChanged: [] };
+    var utils = new Utils();
+
+    var tooltipElement = document.getElementById('br-tooltip-div');
+    if (tooltipElement == null)
+    {
+        tooltipElement = document.createElement('div');
+        tooltipElement.id = 'br-tooltip-div';
+        tooltipElement.className = 'br-tooltip';
+        document.body.appendChild(tooltipElement);
+    }
+
+    function triggerVisibleChanged()
+    {
+        events.visibleChanged.forEach(function (callback)
+        {
+            callback(visible);
+        });
+    }
+
+    function setVisible(b)
+    {
+        if (visible !== b)
+        {
+            visible = b;
+            utils.showElement(tooltipElement, b);
+            triggerVisibleChanged();
+        }
+    }
+
+    function setHtml(html)
+    {
+        tooltipElement.innerHTML = html;
+    }
+
+    function setText(text)
+    {
+        tooltipElement.innerText = text;
+    }
+
+    function getText()
+    {
+        return tooltipElement.innerText;
+    }
+
+    function getHtml()
+    {
+        return tooltipElement.innerHTML;
+    }
+
+    function setPosition(left, top)
+    {
+        tooltipElement.style.left = left + 'px';
+        tooltipElement.style.top = top + 'px';
+    }
+
+    this.triggerVisibleChanged = triggerVisibleChanged;
+    this.isVisible = function () { return visible; };
+    this.setVisible = setVisible;
+    this.setText = setText;
+    this.setHtml = setHtml;
+    this.getText = getText;
+    this.getHtml = getHtml;
+    this.setPosition = setPosition;
+};
+
+/**
  * Provides a user interface for a methods popup. This class basically generates
  * a div that preview a list of strings.
- * @class
+ * 
+ * @class MethodsIntellisense
  */
 var MethodsIntellisense = function ()
 {
@@ -352,7 +426,7 @@ var MethodsIntellisense = function ()
  * generates a div that acts as a list of items. When items are displayed (usually
  * triggered by a keyboard event), the user can select an item from the list.
  * 
- * @class
+ * @class DeclarationsIntellisense
  */
 var DeclarationsIntellisense = function ()
 {

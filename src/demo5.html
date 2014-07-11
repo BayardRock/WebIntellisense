@@ -39,6 +39,17 @@
             intellisense.addDeclarationTrigger({ keyCode: 55, shiftKey: true }); // `&`
             intellisense.addDeclarationTrigger({ keyCode: 188, shiftKey: true }); // `<`
             intellisense.addDeclarationTrigger({ keyCode: 190, shiftKey: true }); // `>`
+
+            intellisense.onTooltip(function (position)
+            {
+                var prevSpace = position.line.lastIndexOf(' ', position.columnIndex);
+                var nextSpace = position.line.indexOf(' ', position.columnIndex);
+                var startIdx = prevSpace == -1 ? 0 : prevSpace;
+                var endIdx = nextSpace == -1 ? position.line.length : nextSpace;
+                var word = position.line.substring(startIdx, endIdx);
+                intellisense.setTooltipData(word, position.lineIndex, startIdx, endIdx);
+            });
+
             intellisense.onDeclaration(function (item)
             {
                 // when the user presses `>` hide the intellisense
@@ -165,7 +176,8 @@
             <div class="tab-pane fade active in" id="demo">
                 <p>
                     This demo uses ACE intellisense. Declaration trigger on the keys `&lt;` or `&amp;`. Different documentation is shown for each declaration.
-                    <em>The data shown is hard coded.</em>
+                    <em>The data shown is hard coded.</em> This demo also shows how tooltips work. Type some text and hover over a word. The tooltip will show
+                    what word you are hovered over and will hide itself when the move is no longer hovered over the word.
                 </p>
                 <div id="demoHtml"><div id="editor" style="height: 300px;"></div></div>
             </div>

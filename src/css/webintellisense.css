@@ -99,3 +99,29 @@
     margin-left: 2px;
     margin-right: 2px;
 }
+
+.br-tooltip {
+    min-width: 220px;
+    max-height: 176px;
+    min-height: 22px;
+    z-index: 10;
+    position: absolute;
+    background-color: #E7E8EC;
+    border: 1px solid #CCCEDB;
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+    padding: 5px;
+    margin: 5px;
+    display: none;
+    font-size: 12px;
+    font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
+    overflow: auto;
+}
+
+.ace_marker-layer .br-error {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAQCAYAAAAxtt7zAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjExR/NCNwAAABdJREFUKFNjGNbgPxihAZggiiSEw8AAAMxEB/k37k01AAAAAElFTkSuQmCC);
+   background-repeat: repeat-x;
+   background-position: left bottom;
+   position: absolute;
+   z-index: -2;
+   margin-bottom: -1px;
+}

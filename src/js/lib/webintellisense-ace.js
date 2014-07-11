@@ -3,6 +3,7 @@
     function (require, exports, module)
     {
         var HashHandler = require("./keyboard/hash_handler").HashHandler;
+        var event = require("ace/lib/event");
 
         /**
          * This class provides intellisense for either a textarea or an inputbox.
@@ -18,9 +19,75 @@
             var meths = new MethodsIntellisense();
             var declsTriggers = [];
             var methsTriggers = [];
+            var tooltipCallback = null;
             var declarationsCallback = null;
             var methodsCallback = null;
             var autoCompleteStart = { lineIndex: 0, columnIndex: 0 };
+            var tooltip = new Tooltip();
+            var mouseTimer = null;
+            var mouseTimeout = 1000;
+            var mouseEvent = null;
+            var docPos = null;
+            var isCallingTooltip = false;
+            var tooltipBounds = { lineIndex: 0, startColumnIndex: 0, endColumnIndex: 0 };
+
+            function getDocPosition(x, y)
+            {
+                var r = editor.renderer;
+                var canvasPos = r.scroller.getBoundingClientRect();
+                var offset = (x + r.scrollLeft - canvasPos.left - r.$padding) / r.characterWidth;
+                var row = Math.floor((y + r.scrollTop - canvasPos.top) / r.lineHeight);
+                var column = Math.round(offset);
+                return { rowIndex: row, columnIndex: column };
+            }
+
+            function onMouseHovered()
+            {
+                if (editor.getValue() != '')
+                {
+                    var e = mouseEvent;
+                    var docPos = getDocPosition(e.clientX, e.clientY);
+                    var line = editor.session.getLine(docPos.rowIndex);
+                    if (line.length > docPos.columnIndex)
+                    {
+                        self.isCalling = true;
+                        tooltipCallback({ line: line, lineIndex: docPos.rowIndex, columnIndex: docPos.columnIndex });
+                    }
+                }
+            }
+
+            function onMouseMove(e)
+            {
+                if (!isCallingTooltip)
+                {
+                    if (mouseTimer != null)
+                    {
+                        clearTimeout(mouseTimer);
+                    }
+                    if (tooltip.isVisible())
+                    {
+                        // detect a move out of range
+                        var docPos = getDocPosition(e.clientX, e.clientY);
+                        if (docPos.rowIndex != (tooltipBounds.lineNumber - 1)
+                            || docPos.columnIndex < tooltipBounds.startColumnIndex
+                            || docPos.columnIndex > tooltipBounds.endColumnIndex)
+                        {
+                            tooltip.setVisible(false);
+                        }
+                    }
+                    mouseEvent = e;
+                    mouseTimer = setTimeout(onMouseHovered, mouseTimeout);
+                }
+            }
+
+            function onMouseOut()
+            {
+                if (mouseTimer != null)
+                {
+                    clearTimeout(mouseTimer);
+                    tooltip.setVisible(false);
+                }
+            }
 
             function setEditor(e)
             {
@@ -90,6 +157,10 @@
                         editor.keyBinding.originalOnCommandKey(evt, hashId, keyCode);
                     }
                 };
+
+                // mouse events
+                event.addListener(editor.renderer.scroller, "mousemove", onMouseMove);
+                event.addListener(editor.renderer.content, "mouseout", onMouseOut);
             }
 
             // when the visiblity has changed for the declarations, set the position of the methods UI
@@ -144,12 +215,6 @@
                 editor.focus();
             });
 
-            /**
-             * Adds a trigger to the list of triggers that can cause the declarations user interface
-             * to popup.
-             * @instance
-             * @param {KeyTrigger} trigger - The trigger to add
-             */
             function addDeclarationTrigger(trigger)
             {
                 declsTriggers.push(trigger);
@@ -170,6 +235,11 @@
                 methodsCallback = callback;
             }
 
+            function onTooltip(callback)
+            {
+                tooltipCallback = callback;
+            }
+
             function getFilterText()
             {
                 var cursor = editor.getSelection().getCursor();
@@ -177,8 +247,32 @@
                 return line.substring(autoCompleteStart.columnIndex, cursor.column + 1);
             }
 
+            function setTooltipData(text, lineIndex, startColumnIndex, endColumnIndex)
+            {
+                if (text != '')
+                {
+                    tooltip.setText(text);
+                    tooltip.setVisible(true);
+                    tooltipBounds.lineIndex = lineIndex;
+                    tooltipBounds.startColumnIndex = startColumnIndex;
+                    tooltipBounds.endColumnIndex = endColumnIndex;
+
+                    var r = editor.renderer;
+                    var canvasPos = r.scroller.getBoundingClientRect();
+                    var left = ((tooltipBounds.startColumnIndex) * r.characterWidth) + canvasPos.left - r.scrollLeft;
+                    var top = ((tooltipBounds.lineIndex + 1) * r.lineHeight) + canvasPos.top - r.scrollTop;
+                    tooltip.setPosition(left, top);
+                }
+            }
+
             // set the editor
             setEditor(editor);
+
+            /**
+             * Gets the tooltip user interface
+             * @return {Tooltip}
+             */
+            this.getTooltip = function () { return tooltip; };
 
             /**
              * Gets the declarations user interface
@@ -192,28 +286,45 @@
              */
             this.getMeths = function () { return meths; };
 
+            /**
+             * Adds a trigger to the list of triggers that can cause the declarations user interface to popup.
+             * @param {KeyTrigger} trigger - The trigger to add
+             */
             this.addDeclarationTrigger = addDeclarationTrigger;
 
             /**
-             * Adds a trigger to the list of triggers that can cause the methods user interface
-             * to popup.
+             * Adds a trigger to the list of triggers that can cause the methods user interface to popup.
              * @param {KeyTrigger} trigger - The trigger to add
              */
             this.addMethodsTrigger = addMethodsTrigger;
 
             /**
-             * Sets a callback to invoke when a key is pressed that causes the declarations list to
-             * popup.
+             * Sets a callback to invoke when a key is pressed that causes the declarations list to popup.
              * @param {function} callback - The callback to set
              */
             this.onDeclaration = onDeclaration;
 
             /**
-             * Sets a callback to invoke when a key is pressed that causes the methods list to
-             * popup.
+             * Sets a callback to invoke when a key is pressed that causes the methods list to popup.
              * @param {function} callback - The callback to set
              */
             this.onMethod = onMethod;
+
+            /**
+             * Sets a callback to invoke when the user hovers for a short period of time
+             * @param {function} callback - The callback to set
+             */
+            this.onTooltip = onTooltip;
+
+            /**
+             * Sets the data necessary to display a tooltip
+             * 
+             * @param {string} text - The text to display for the tooltip
+             * @param {int} lineIndex - The line index where the tooltip is on
+             * @param {int} startColumnIndex - The starting column where the tooltip should be displayed if the mouse leaves
+             * @param {int} endColumnIndex - The ending column where the tooltip will no longer be displayed if the mouse leaves
+             */
+            this.setTooltipData = setTooltipData;
 
             /**
              * Delegate for setting the methods to display to the user
