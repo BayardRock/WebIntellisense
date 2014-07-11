@@ -1,18 +1,95 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Web Intellisense - Folder Example</title>
+    <title>Web Intellisense - Home</title>
     <script src="js/references/jquery-2.1.1.min.js"></script>
     <script src="js/references/bootstrap/bootstrap.min.js"></script>
-    <script src="js/lib/intellisense.js"></script>
-    <script src="js/lib/intellisense-textbox.js"></script>
     <script src="js/references/ace-1.1.4/ace.js"></script>
     <script src="js/references/ace-1.1.4/mode-html.js"></script>
     <script src="js/references/ace-1.1.4/mode-css.js"></script>
     <script src="js/references/ace-1.1.4/mode-javascript.js"></script>
-    <link href="css/intellisense.css" rel="stylesheet" />
+    <script src="js/lib/webintellisense.js"></script>
+    <script src="js/lib/webintellisense-ace.js"></script>
+    <link href="css/webintellisense.css" rel="stylesheet" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
+    <style type="text/css">
+        .icon-glyph-4 {
+            background-image: url('css/html.png');
+        }
+
+        .icon-glyph-5 {
+            background-image: url('css/character.png');
+        }
+    </style>
+    <script type="text/javascript">
+
+        function demo()
+        {
+            // setup the ACE editor with html mode
+            var AceIntellisense = ace.require('ace/intellisense').AceIntellisense;
+            var editor = ace.edit('editor');
+            editor.getSession().setMode("ace/mode/html");
+            editor.focus();
+
+            var intellisense = new AceIntellisense(editor);
+            intellisense.getDecls().setFilterMode('contains');
+            intellisense.addDeclarationTrigger({ keyCode: 55, shiftKey: true }); // `&`
+            intellisense.addDeclarationTrigger({ keyCode: 188, shiftKey: true }); // `<`
+            intellisense.addDeclarationTrigger({ keyCode: 190, shiftKey: true }); // `>`
+
+            intellisense.onTooltip(function (position)
+            {
+                var prevSpace = position.line.lastIndexOf(' ', position.columnIndex);
+                var nextSpace = position.line.indexOf(' ', position.columnIndex);
+                var startIdx = prevSpace == -1 ? 0 : prevSpace;
+                var endIdx = nextSpace == -1 ? position.line.length : nextSpace;
+                var word = position.line.substring(startIdx, endIdx);
+                intellisense.setTooltipData(word, position.lineIndex, startIdx, endIdx);
+            });
+
+            intellisense.onDeclaration(function (item)
+            {
+                // when the user presses `>` hide the intellisense
+                if (item.keyCode === 190)
+                {
+                    intellisense.getDecls().setVisible(false);
+                }
+                // when the user presses `&` show the intellisense for escape characters
+                else if (item.keyCode === 55)
+                {
+                    var codes = ['nbsp', 'lt', 'gt', 'cent', 'pound', 'curren', 'yen', 'brvbar', 'sect', 'uml', 'copy', 'ordf'];
+                    var data = codes.map(function (code)
+                    {
+                        return { glyph: 5, name: '&amp;' + code + '; (&' + code + ')', value: code + ';' };
+                    });
+                    intellisense.setDeclarations(data);
+                }
+                // otherwise pressed `<`
+                else
+                {
+                    var data = [
+                        { glyph: 4, name: 'body' },
+                        { glyph: 4, name: 'div' },
+                        { glyph: 4, name: 'head' },
+                        { glyph: 4, name: 'html' },
+                        { glyph: 4, name: 'link' },
+                        { glyph: 4, name: 'p' },
+                        { glyph: 4, name: 'script js', value: 'script type="text/javascript"' },
+                        { glyph: 4, name: 'span' },
+                        { glyph: 4, name: 'title' }
+                    ];
+                    intellisense.setDeclarations(data);
+                }
+            });
+        }
+
+        $(function ()
+        {
+            demo();
+        });
+    </script>
+
 </head>
 <body>
 
@@ -51,7 +128,12 @@
 
     <div class="main">
 
-        <p>Welcome</p>
+        <div class="jumbotron">
+            <h1>Welcome to WebIntellisense!</h1>
+            <p>Home to a pure javascript and CSS implementation for intellisense on the web. With support for <a href="http://ace.c9.io/">ACE</a> and <a href="http://codemirror.net/">CodeMirror</a> editors. View a example demo of an HTML editor below. Try typing `&lt;` or `&amp;`. <a href="demos.html">More demos</a>.</p>
+        </div>
+
+        <div id="editor" style="height: 300px;"></div>
 
     </div>
 

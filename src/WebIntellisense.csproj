@@ -66,6 +66,7 @@
     <Content Include="css\site.css" />
     <Content Include="css\twitter.png" />
     <Content Include="css\webintellisense.css" />
+    <Content Include="demos.html" />
     <Content Include="demo1.html" />
     <Content Include="demo2.html" />
     <Content Include="demo3.html" />
