@@ -17,8 +17,7 @@
             var keyboardHandler = new HashHandler();
             var decls = new DeclarationsIntellisense();
             var meths = new MethodsIntellisense();
-            var declsTriggers = [];
-            var methsTriggers = [];
+            var triggers = { upDecls: [], downDecls: [], upMeths: [], downMeths: [] };
             var tooltipCallback = null;
             var declarationsCallback = null;
             var methodsCallback = null;
@@ -89,6 +88,33 @@
                 }
             }
 
+            function processTriggers(triggers, evt, callback)
+            {
+                for (var k in triggers)
+                {
+                    var item = triggers[k];
+                    var shiftKey = item.shiftKey || false;
+                    var ctrlKey = item.ctrlKey || false;
+                    var keyCode = item.keyCode || 0;
+                    var preventDefault = item.preventDefault || false;
+
+                    if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
+                    {
+                        var cursor = editor.getSelection().getCursor();
+                        autoCompleteStart.columnIndex = cursor.column + 1;
+                        autoCompleteStart.lineIndex = cursor.row;
+                        callback(item);
+                        if (preventDefault)
+                        {
+                            evt.preventDefault();
+                            evt.cancelBubble = true;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             function setEditor(e)
             {
                 editor = e;
@@ -106,36 +132,11 @@
                 editor.keyBinding.onCommandKey = function (evt, hashId, keyCode)
                 {
                     if (evt == null) { return; }
-                    var triggered = false;
-                    function processTriggers(triggers, callback)
+
+                    if (!processTriggers(triggers.upDecls, evt, declarationsCallback))
                     {
-                        if (triggered) { return; }
-                        triggers.forEach(function (item)
-                        {
-                            if (triggered) { return; }
-
-                            var shiftKey = item.shiftKey || false;
-                            var ctrlKey = item.ctrlKey || false;
-                            var keyCode = item.keyCode || 0;
-                            var preventDefault = item.preventDefault || false;
-
-                            if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
-                            {
-                                var cursor = editor.getSelection().getCursor();
-                                autoCompleteStart.columnIndex = cursor.column + 1;
-                                autoCompleteStart.lineIndex = cursor.row;
-                                triggered = true;
-                                callback(item);
-                                if (preventDefault)
-                                {
-                                    evt.preventDefault();
-                                }
-                            }
-                        });
+                        processTriggers(triggers.upMeths, evt, methodsCallback);
                     }
-
-                    processTriggers(declsTriggers, declarationsCallback);
-                    processTriggers(methsTriggers, methodsCallback);
 
                     if (decls.isVisible())
                     {
@@ -157,11 +158,11 @@
                         editor.keyBinding.originalOnCommandKey(evt, hashId, keyCode);
                     }
                 };
-
-                // mouse events
-                event.addListener(editor.renderer.scroller, "mousemove", onMouseMove);
-                event.addListener(editor.renderer.content, "mouseout", onMouseOut);
             }
+
+            // mouse events
+            event.addListener(editor.renderer.scroller, "mousemove", onMouseMove);
+            event.addListener(editor.renderer.content, "mouseout", onMouseOut);
 
             // when the visiblity has changed for the declarations, set the position of the methods UI
             decls.onVisibleChanged(function (v)
@@ -215,14 +216,23 @@
                 editor.focus();
             });
 
+            function addTrigger(trigger, methsOrDecls)
+            {
+                var type = trigger.type || 'up';
+                if (triggers[type + methsOrDecls])
+                {
+                    triggers[type + methsOrDecls].push(trigger);
+                }
+            }
+
             function addDeclarationTrigger(trigger)
             {
-                declsTriggers.push(trigger);
+                addTrigger(trigger, 'Decls');
             }
 
             function addMethodsTrigger(trigger)
             {
-                methsTriggers.push(trigger);
+                addTrigger(trigger, 'Meths');
             }
 
             function onDeclaration(callback)

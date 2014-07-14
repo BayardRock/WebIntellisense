@@ -9,57 +9,57 @@ var CodeMirrorIntellisense = function (editor)
 {
     var decls = new DeclarationsIntellisense();
     var meths = new MethodsIntellisense();
-    var declsTriggers = [];
-    var methsTriggers = [];
+    var triggers = { upDecls: [], downDecls: [], upMeths: [], downMeths: [] };
     var declarationsCallback = null;
     var methodsCallback = null;
     var autoCompleteStart = { lineIndex: 0, columnIndex: 0 };
+    var triggered = false;
+
+    function processTriggers(triggers, evt, callback)
+    {
+        for (var k in triggers)
+        {
+            var item = triggers[k];
+            var shiftKey = item.shiftKey || false;
+            var ctrlKey = item.ctrlKey || false;
+            var keyCode = item.keyCode || 0;
+            var preventDefault = item.preventDefault || false;
+
+            if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
+            {
+                var cursor = editor.getCursor();
+                autoCompleteStart.columnIndex = cursor.ch;
+                autoCompleteStart.lineIndex = cursor.line;
+                callback(item);
+                if (preventDefault)
+                {
+                    evt.preventDefault();
+                    evt.cancelBubble = true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     function setEditor(e)
     {
         editor = e;
-        editor.on('keyup', function ()
+        editor.on('keyup', function (cm, evt)
         {
             if (decls.isVisible())
             {
                 decls.setFilter(getFilterText());
             }
+
+            if (!processTriggers(triggers.upDecls, evt, declarationsCallback))
+            {
+                processTriggers(triggers.upMeths, evt, methodsCallback);
+            }
         });
 
         editor.on('keydown', function (cm, evt)
         {
-            var triggered = false;
-
-            function processTriggers(triggers, callback)
-            {
-                if (triggered) { return; }
-                triggers.forEach(function (item)
-                {
-                    if (triggered) { return; }
-
-                    var shiftKey = item.shiftKey || false;
-                    var ctrlKey = item.ctrlKey || false;
-                    var keyCode = item.keyCode || 0;
-                    var preventDefault = item.preventDefault || false;
-
-                    if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
-                    {
-                        var cursor = editor.getCursor();
-                        autoCompleteStart.columnIndex = cursor.ch + 1;
-                        autoCompleteStart.lineIndex = cursor.line;
-                        triggered = true;
-                        callback(item);
-                        if (preventDefault)
-                        {
-                            evt.preventDefault();
-                        }
-                    }
-                });
-            }
-
-            processTriggers(declsTriggers, declarationsCallback);
-            processTriggers(methsTriggers, methodsCallback);
-
             if (decls.isVisible())
             {
                 if (evt.keyCode === 8)
@@ -70,6 +70,10 @@ var CodeMirrorIntellisense = function (editor)
                 {
                     decls.handleKeyDown(evt);
                 }
+            }
+            if (!processTriggers(triggers.downDecls, evt, declarationsCallback))
+            {
+                processTriggers(triggers.downMeths, evt, methodsCallback);
             }
             if (meths.isVisible())
             {
@@ -113,14 +117,23 @@ var CodeMirrorIntellisense = function (editor)
         editor.focus();
     });
 
+    function addTrigger(trigger, methsOrDecls)
+    {
+        var type = trigger.type || 'up';
+        if (triggers[type + methsOrDecls])
+        {
+            triggers[type + methsOrDecls].push(trigger);
+        }
+    }
+
     function addDeclarationTrigger(trigger)
     {
-        declsTriggers.push(trigger);
+        addTrigger(trigger, 'Decls');
     }
 
     function addMethodsTrigger(trigger)
     {
-        methsTriggers.push(trigger);
+        addTrigger(trigger, 'Meths');
     }
 
     function onDeclaration(callback)
