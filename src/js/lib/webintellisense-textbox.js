@@ -4,7 +4,7 @@
  * 
  * @class KeyTrigger
  */
-var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault)
+var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault, type)
 {
     /**
      * The key code from the keyboard that should trigger a callback
@@ -29,6 +29,12 @@ var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault)
      * @property preventDefault
      */
     this.preventDefault = preventDefault;
+
+    /**
+     * The type of keyboard event, either 'up' or 'down'
+     * @property type
+     */
+    this.type = type;
 };
 
 /**
@@ -38,72 +44,72 @@ var KeyTrigger = function (keyCode, shiftKey, ctrlKey, preventDefault)
  * @param {string|HTMLElement} editor - The id of a textarea or inputbox or the actual element
  * @class TextBoxIntellisense
  */
-var TextBoxIntellisense = function (editor)
+var TextBoxIntellisense = function (editorOrId)
 {
     var decls = new DeclarationsIntellisense();
     var meths = new MethodsIntellisense();
-    var declsTriggers = [];
-    var methsTriggers = [];
+    var triggers = { upDecls: [], downDecls: [], upMeths: [], downMeths: [] };
     var declarationsCallback = null;
     var methodsCallback = null;
     var startColumnIndex = 0;
+    var editor = null;
+
+    function processTriggers(triggers, evt, callback)
+    {
+        for (var k in triggers)
+        {
+            var item = triggers[k];
+            var shiftKey = item.shiftKey || false;
+            var ctrlKey = item.ctrlKey || false;
+            var keyCode = item.keyCode || 0;
+            var preventDefault = item.preventDefault || false;
+
+            if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
+            {
+                startColumnIndex = getCaretOffset();
+                callback(item);
+                if (preventDefault)
+                {
+                    evt.preventDefault();
+                    evt.cancelBubble = true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     function getCaretOffset()
     {
         return editor.selectionStart;
     }
 
-    function setEditor(e)
+    function setEditor(editorOrId)
     {
-        if (typeof (e) === 'string')
+        if (typeof (editorOrId) === 'string')
         {
-            editor = document.getElementById(e);
+            editor = document.getElementById(editorOrId);
         }
         else
         {
-            editor = e;
+            editor = editorOrId;
         }
 
-        editor.onkeyup = function ()
+        editor.onkeyup = function (evt)
         {
             if (decls.isVisible())
             {
                 decls.setFilter(getFilterText());
             }
+
+            if (!processTriggers(triggers.upDecls, evt, declarationsCallback))
+            {
+                processTriggers(triggers.upMeths, evt, methodsCallback);
+            }
         };
 
         editor.onkeydown = function (evt)
         {
-            var triggered = false;
-
-            function processTriggers(triggers, callback)
-            {
-                if (triggered) { return; }
-                triggers.forEach(function (item)
-                {
-                    if (triggered) { return; }
-
-                    var shiftKey = item.shiftKey || false;
-                    var ctrlKey = item.ctrlKey || false;
-                    var keyCode = item.keyCode || 0;
-                    var preventDefault = item.preventDefault || false;
-
-                    if (evt.keyCode === keyCode && evt.shiftKey === shiftKey && evt.ctrlKey === ctrlKey)
-                    {
-                        startColumnIndex = getCaretOffset() + 1;
-                        triggered = true;
-                        callback(item);
-                        if (preventDefault)
-                        {
-                            evt.preventDefault();
-                        }
-                    }
-                });
-            }
-
-            processTriggers(declsTriggers, declarationsCallback);
-            processTriggers(methsTriggers, methodsCallback);
-
             if (decls.isVisible())
             {
                 if (evt.keyCode === 8)
@@ -114,6 +120,10 @@ var TextBoxIntellisense = function (editor)
                 {
                     decls.handleKeyDown(evt);
                 }
+            }
+            if (!processTriggers(triggers.downDecls, evt, declarationsCallback))
+            {
+                processTriggers(triggers.downMeths, evt, methodsCallback);
             }
             if (meths.isVisible())
             {
@@ -269,20 +279,23 @@ var TextBoxIntellisense = function (editor)
         decls.setVisible(false);
     });
 
-    /**
-     * Adds a trigger to the list of triggers that can cause the declarations user interface
-     * to popup.
-     * @instance
-     * @param {KeyTrigger} trigger - The trigger to add
-     */
+    function addTrigger(trigger, methsOrDecls)
+    {
+        var type = trigger.type || 'up';
+        if (triggers[type + methsOrDecls])
+        {
+            triggers[type + methsOrDecls].push(trigger);
+        }
+    }
+
     function addDeclarationTrigger(trigger)
     {
-        declsTriggers.push(trigger);
+        addTrigger(trigger, 'Decls');
     }
 
     function addMethodsTrigger(trigger)
     {
-        methsTriggers.push(trigger);
+        addTrigger(trigger, 'Meths');
     }
 
     function onDeclaration(callback)
@@ -302,7 +315,7 @@ var TextBoxIntellisense = function (editor)
     }
 
     // set the editor
-    setEditor(editor);
+    setEditor(editorOrId);
 
     /**
      * Gets the declarations user interface
@@ -316,6 +329,11 @@ var TextBoxIntellisense = function (editor)
      */
     this.getMeths = function () { return meths; };
 
+    /**
+     * Adds a trigger to the list of triggers that can cause the declarations user interface
+     * to popup.
+     * @param {KeyTrigger} trigger - The trigger to add
+     */
     this.addDeclarationTrigger = addDeclarationTrigger;
 
     /**

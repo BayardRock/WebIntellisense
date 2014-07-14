@@ -521,8 +521,15 @@ var DeclarationsIntellisense = function ()
 
     function handleKeyDown(evt)
     {
-        // escape, left, right
-        if (evt.keyCode === 27 || evt.keyCode === 37 || evt.keyCode === 39)
+        // escape
+        if (evt.keyCode == 27)
+        {
+            setVisible(false);
+            evt.preventDefault();
+            evt.cancelBubble = true;
+        }
+        // left, right
+        else if (evt.keyCode === 27 || evt.keyCode === 37 || evt.keyCode === 39)
         {
             setVisible(false);
         }
@@ -531,30 +538,35 @@ var DeclarationsIntellisense = function ()
         {
             moveSelected(-1);
             evt.preventDefault();
+            evt.cancelBubble = true;
         }
         // down
         else if (evt.keyCode === 40)
         {
             moveSelected(1);
             evt.preventDefault();
+            evt.cancelBubble = true;
         }
         // page up 
         else if (evt.keyCode === 33)
         {
             moveSelected(-5);
             evt.preventDefault();
+            evt.cancelBubble = true;
         }
         // page down
         else if (evt.keyCode === 34)
         {
             moveSelected(5);
             evt.preventDefault();
+            evt.cancelBubble = true;
         }
         // trigger item chosen
         else if (evt.keyCode === 13 || evt.keyCode === 9)
         {
             triggerItemChosen(getSelectedItem());
             evt.preventDefault();
+            evt.cancelBubble = true;
         }
     }
 
@@ -714,10 +726,10 @@ var DeclarationsIntellisense = function ()
             filteredDeclarations = data;
 
             // show the elements
-            setVisible(true);
-            showDocumentation(true);
             setSelectedIndex(0);
             setFilter('');
+            setVisible(true);
+            refreshUI();
         }
     }
 
