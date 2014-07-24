@@ -227,7 +227,7 @@ var CodeMirrorIntellisense = function (editor)
 
     /**
      * Gets the text after startColumnIndex but before caret offset.
-     * @returns {int}
+     * @returns {string}
      * @function getFilterText
      */
     this.getFilterText = getFilterText;

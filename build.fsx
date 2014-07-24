@@ -7,11 +7,14 @@
 #r "packages/FAKE/tools/Fake.Deploy.Lib.dll"
 open Fake
 open Fake.Git
+open Fake.REST
 open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
 open System
-open System.IO
+open System.Collections.Specialized
 open System.Diagnostics
+open System.Net
+open System.IO
 
 let project = "WebInstellisense"
 let summary = "Bayard Rock's WebIntellisense"
@@ -38,35 +41,37 @@ Target "Build" (fun _ ->
 
     let libDir = Path.Combine("bin", "content", "Scripts")
     let cssDir = Path.Combine("bin", "content", "Content")
-    let toolsDir = Path.Combine("bin", "Tools")
 
     createDir(libDir)
     createDir(cssDir)
-    createDir(toolsDir)
 
     let minify(file) = 
+
         let fileName = Path.GetFileName(file)
+        let url = "http://closure-compiler.appspot.com/compile"
         let minFileName = Path.Combine(libDir, Path.ChangeExtension(fileName, ".min.js"))
-        
-        ExecProcess(fun info ->
-            info.FileName <- "node"
-            info.Arguments <- sprintf "packages/uglifyjs/bin/uglifyjs -o %s %s" minFileName file
-        ) (TimeSpan.FromMinutes(5.0)) |> ignore
+
+        use wc = new WebClient()
+        let data = new NameValueCollection()
+        data.["js_code"] <- File.ReadAllText(file)
+        data.["output_format"] <- "text"
+        data.["output_info"] <- "compiled_code"
+        let textBytes = wc.UploadValues(url, data)
+        File.WriteAllBytes(minFileName, textBytes)
 
     // copy javascript files
-    !! "src/js/lib/*.js" |> Seq.iter (minify)
+    !! "src/js/lib/*.js" |> Seq.iter minify
 
     // copy css files
     File.Copy("src/css/webintellisense.css", Path.Combine(cssDir, "webintellisense.css"))
-
-    // copy powershell files
-    !! "nuget/*.ps1" |> Seq.iter (fun file ->
-        let fileName = Path.GetFileName(file)
-        let newFile = Path.Combine(toolsDir, fileName)
-        File.Copy(file, newFile)
-    )
 )
-                        
+
+Target "Zip" (fun _ ->
+    let notes = String.Join("\n", release.Notes)
+    !! "bin/**/*.*" |> CreateZip "bin" "bin/release.zip" notes 0 true
+)
+
+
 // --------------------------------------------------------------------------------------
 // Clean build results 
 
@@ -109,6 +114,7 @@ Target "All" DoNothing
 // dependencies
 "Clean"
   ==> "Build"
+  ==> "Zip"
   ==> "All"
 
 "All"

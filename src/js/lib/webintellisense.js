@@ -200,8 +200,8 @@ var Tooltip = function ()
 
     /**
      * Check to see if the user interface is visible or not
-     * @function isVisible
      * @returns {bool} True if visible otherwise false
+     * @function isVisible
      */
     this.isVisible = function () { return visible; };
 
@@ -228,14 +228,15 @@ var Tooltip = function ()
 
     /**
      * Gets the inner text of the tooltip element
-     * @function getText
      * @returns {string} The inner text of the element
+     * @function getText
      */
     this.getText = getText;
 
     /**
      * Gets the inner html of the tooltip elemnt
-     * @function getHtml The inner html of the element
+     * @function getHtml
+     * @returns {string} The inner HTML
      */
     this.getHtml = getHtml;
 
