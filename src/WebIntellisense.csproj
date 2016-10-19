@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,10 +76,10 @@
     <Content Include="demo4.html" />
     <Content Include="demo5.html" />
     <Content Include="index.html" />
-    <Content Include="js\lib\webintellisense-ace.js" />
-    <Content Include="js\lib\webintellisense-codemirror.js" />
-    <Content Include="js\lib\webintellisense-textbox.js" />
-    <Content Include="js\lib\webintellisense.js" />
+    <TypeScriptCompile Include="js\lib\webintellisense-ace.ts" />
+    <TypeScriptCompile Include="js\lib\webintellisense-codemirror.ts" />
+    <TypeScriptCompile Include="js\lib\webintellisense-textbox.ts" />
+    <TypeScriptCompile Include="js\lib\webintellisense.ts" />
     <Content Include="js\references\ace-1.1.4\ace.js" />
     <Content Include="js\references\ace-1.1.4\mode-css.js" />
     <Content Include="js\references\ace-1.1.4\mode-html.js" />
@@ -92,12 +95,18 @@
     <Content Include="js\references\codemirror-4.3\mllike.js" />
     <Content Include="js\references\jquery-2.1.1.min.js" />
     <Content Include="Web.config" />
+    <TypeScriptCompile Include="Scripts\typings\codemirror\codemirror-matchbrackets.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\codemirror\codemirror-runmode.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\codemirror\codemirror-showhint.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\codemirror\codemirror.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\codemirror\searchcursor.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="js\references\codemirror-4.3\LICENSE" />
+    <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -105,12 +114,15 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

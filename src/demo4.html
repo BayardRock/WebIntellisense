@@ -25,8 +25,8 @@
     </style>
     <script type="text/javascript">
 
-        function demo()
-        {
+        function demo() {
+
             // codemirror
             var editor = CodeMirror(document.getElementById('editor'),
             {
@@ -41,23 +41,24 @@
             intellisense.addMethodsTrigger({ keyCode: 48, shiftKey: true });// `)`
             intellisense.addMethodsTrigger({ keyCode: 8 }); // `backspace`
 
+            // called when the user has hovered over some text
+            intellisense.onHover(function (item) {
+                intellisense.showHoverTooltip('this.x: int');
+            });
+
             // called when the methods are triggered
-            intellisense.onMethod(function (item)
-            {
+            intellisense.onMethod(function (item) {
                 // hide when the users presses `backspace` or `)`
-                if (item.keyCode === 48 || item.keyCode === 8)
-                {
+                if (item.keyCode === 48 || item.keyCode === 8) {
                     intellisense.getMeths().setVisible(false);
                 }
-                else
-                {
+                else {
                     intellisense.setMethods(['CompareTo(int)', 'CompareTo(Object)']);
                 }
             });
 
             // called when the declarations are triggered
-            intellisense.onDeclaration(function (item)
-            {
+            intellisense.onDeclaration(function (item) {
                 var data = [
                     { glyph: 3, name: 'CompareTo', documentation: 'Converts to object to another object' },
                     { glyph: 3, name: 'ToString', documentation: 'Converts to object to a string' }
@@ -66,29 +67,24 @@
             });
         }
 
-        function formatScript(script)
-        {
+        function formatScript(script) {
             var whiteSpaceCount = 0;
             var lines = script.split('\n');
             lines = lines.splice(2, lines.length - 3);
-            for (var i in lines[0])
-            {
+            for (var i in lines[0]) {
                 var c = lines[0][i];
-                if (c !== ' ')
-                {
+                if (c !== ' ') {
                     break;
                 }
                 whiteSpaceCount++;
             }
-            lines = lines.map(function (item)
-            {
+            lines = lines.map(function (item) {
                 return item.substring(whiteSpaceCount);
             });
             return lines.join('\n');
         }
 
-        $(function ()
-        {
+        $(function () {
             var htmlEditor = ace.edit('htmlEditor');
             htmlEditor.getSession().setMode("ace/mode/html");
             htmlEditor.setValue($('#demoHtml').get(0).innerHTML);

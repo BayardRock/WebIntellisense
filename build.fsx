@@ -6,13 +6,9 @@
 #r "packages/FAKE/tools/FakeLib.dll"
 #r "packages/FAKE/tools/Fake.Deploy.Lib.dll"
 open Fake
-open Fake.Git
-open Fake.REST
-open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
 open System
 open System.Collections.Specialized
-open System.Diagnostics
 open System.Net
 open System.IO
 
@@ -50,6 +46,7 @@ Target "Build" (fun _ ->
         let fileName = Path.GetFileName(file)
         let url = "http://closure-compiler.appspot.com/compile"
         let minFileName = Path.Combine(libDir, Path.ChangeExtension(fileName, ".min.js"))
+        logfn "Minifying... %s to %s" fileName minFileName
 
         use wc = new WebClient()
         let data = new NameValueCollection()
